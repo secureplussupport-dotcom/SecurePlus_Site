@@ -909,13 +909,13 @@
       "concept_tags": [
         "sec.change-mgmt"
       ],
-      "definition": "",
+      "definition": "A controlled process for proposing, assessing, approving, testing, implementing, and documenting changes to systems while limiting security and availability risks.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/128/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-maintenance-window",
@@ -928,13 +928,13 @@
       "concept_tags": [
         "sec.change-mgmt"
       ],
-      "definition": "",
+      "definition": "An agreed period when planned maintenance or changes may be performed, with any expected service interruption communicated in advance.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/128/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-backout-plan",
@@ -947,13 +947,13 @@
       "concept_tags": [
         "sec.change-mgmt"
       ],
-      "definition": "",
+      "definition": "Documented steps for returning a system to its previous working state if a change fails or causes unacceptable effects.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/128/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-version-control",
@@ -966,13 +966,13 @@
       "concept_tags": [
         "sec.change-mgmt"
       ],
-      "definition": "",
+      "definition": "Tracking and managing revisions to files, code, or configurations so changes can be reviewed, compared, and restored.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/128/upd1/final"
     },
     {
       "id": "sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
@@ -1006,13 +1006,13 @@
       "concept_tags": [
         "sec.non-repudiation"
       ],
-      "definition": "",
+      "definition": "Evidence linking an action or message to its originator, making denial harder. Properly managed digital signatures can support it; encryption alone does not.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-gap-analysis",
@@ -1025,13 +1025,13 @@
       "concept_tags": [
         "risk.inherent-residual"
       ],
-      "definition": "",
+      "definition": "Comparing the current security state with a desired baseline or requirement to identify missing controls and improvements.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-card-1-1a-impact-analysis",
@@ -1044,13 +1044,13 @@
       "concept_tags": [
         "sec.change-mgmt"
       ],
-      "definition": "",
+      "definition": "Assessing how a proposed change could affect security, dependencies, business operations, and service availability before implementation.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/128/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-preventive-controls",
@@ -1063,13 +1063,13 @@
       "concept_tags": [
         "sec.ctrl-prevent"
       ],
-      "definition": "",
+      "definition": "Safeguards intended to stop an unwanted event before it occurs, such as access restrictions or secure configuration.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-detective-controls",
@@ -1082,13 +1082,13 @@
       "concept_tags": [
         "sec.ctrl-detect"
       ],
-      "definition": "",
+      "definition": "Safeguards that identify and report events or suspicious activity, such as log monitoring, alarms, or intrusion detection.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-corrective-controls",
@@ -1101,13 +1101,13 @@
       "concept_tags": [
         "sec.ctrl-correct"
       ],
-      "definition": "",
+      "definition": "Safeguards that limit damage and restore an acceptable state after an incident, such as recovering data from a verified backup.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-deterrent-controls",
@@ -1120,13 +1120,13 @@
       "concept_tags": [
         "sec.ctrl-deter"
       ],
-      "definition": "",
+      "definition": "Safeguards intended to discourage unwanted behavior by increasing its perceived risk or consequences, such as warning signs or visible cameras.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-directive-controls",
@@ -1139,13 +1139,13 @@
       "concept_tags": [
         "sec.ctrl-admin"
       ],
-      "definition": "",
+      "definition": "Policies, instructions, and other safeguards that tell people which actions are required or prohibited.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1a-managerial-controls",
@@ -1158,13 +1158,13 @@
       "concept_tags": [
         "sec.ctrl-admin"
       ],
-      "definition": "",
+      "definition": "Administrative oversight and decision-making safeguards, such as security policies, risk assessments, and management reviews.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1b-technical-controls",
@@ -1177,13 +1177,13 @@
       "concept_tags": [
         "sec.ctrl-tech"
       ],
-      "definition": "",
+      "definition": "Safeguards implemented through hardware or software, such as encryption, access-control rules, and endpoint protection.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1b-operational-controls",
@@ -1196,13 +1196,13 @@
       "concept_tags": [
         "sec.ctrl-ops"
       ],
-      "definition": "",
+      "definition": "Safeguards carried out through people and recurring processes, such as incident handling, staff training, and routine security checks.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1b-physical-controls",
@@ -1215,13 +1215,13 @@
       "concept_tags": [
         "sec.ctrl-phys"
       ],
-      "definition": "",
+      "definition": "Safeguards protecting facilities, equipment, and people against physical access or environmental threats, such as locks, barriers, and fire suppression.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1b-bollards",
@@ -1234,13 +1234,13 @@
       "concept_tags": [
         "sec.ctrl-phys"
       ],
-      "definition": "",
+      "definition": "Strong posts positioned to restrict vehicle access and protect entrances or people. They do not by themselves prevent pedestrian access.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1b-access-control-vestibule-mantraps",
@@ -1255,13 +1255,13 @@
       "concept_tags": [
         "sec.ctrl-phys"
       ],
-      "definition": "",
+      "definition": "A small entry area with controlled, interlocking doors that helps verify access before allowing passage into a secured space.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1b-cctv-closed-circuit-television",
@@ -1276,13 +1276,13 @@
       "concept_tags": [
         "sec.ctrl-phys"
       ],
-      "definition": "",
+      "definition": "Closed-circuit television uses cameras to monitor and record selected areas for surveillance and investigation. Recording activity does not itself stop an intrusion.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-1-1b-honeypot",
@@ -1295,13 +1295,13 @@
       "concept_tags": [
         "sec.honeypot"
       ],
-      "definition": "",
+      "definition": "A deliberately exposed decoy system or service used to attract suspicious activity for detection and analysis, separated from production resources.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/94/final"
     },
     {
       "id": "sy0701-card-1-1b-honeynet",
@@ -1314,13 +1314,13 @@
       "concept_tags": [
         "sec.honeypot"
       ],
-      "definition": "",
+      "definition": "A network of decoy systems designed to observe attacker behavior across multiple hosts without exposing production assets.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/94/final"
     },
     {
       "id": "sy0701-card-1-1b-honeytoken",
@@ -1333,13 +1333,13 @@
       "concept_tags": [
         "sec.honeypot"
       ],
-      "definition": "",
+      "definition": "A decoy credential, record, or other data item whose use or access can reveal unauthorized activity.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/94/final"
     },
     {
       "id": "sy0701-card-1-1b-honeyfile",
@@ -1352,13 +1352,13 @@
       "concept_tags": [
         "sec.honeypot"
       ],
-      "definition": "",
+      "definition": "A decoy file placed where unauthorized access can be detected, often using monitoring or an embedded tracking mechanism.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/94/final"
     },
     {
       "id": "sy0701-card-1-1b-policy-engine",
@@ -1371,13 +1371,13 @@
       "concept_tags": [
         "sec.zero-trust"
       ],
-      "definition": "",
+      "definition": "In zero trust, the component that evaluates policy and contextual signals to decide whether access to a resource should be granted, denied, or revoked.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/207/final"
     },
     {
       "id": "sy0701-card-1-1b-policy-administrator",
@@ -1390,13 +1390,13 @@
       "concept_tags": [
         "sec.zero-trust"
       ],
-      "definition": "",
+      "definition": "In zero trust, the component that carries out the policy engine's decision by arranging or ending the communication path through enforcement points.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/207/final"
     },
     {
       "id": "sy0701-card-1-1b-policy-enforcement-point-pep",
@@ -1411,13 +1411,13 @@
       "concept_tags": [
         "sec.zero-trust"
       ],
-      "definition": "",
+      "definition": "In zero trust, the component that allows, monitors, or terminates connections between a subject and a resource according to policy decisions.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/207/final"
     },
     {
       "id": "sy0701-card-1-1b-root-of-trust",
@@ -1430,13 +1430,13 @@
       "concept_tags": [
         "cry.hsm-tpm"
       ],
-      "definition": "",
+      "definition": "A foundational hardware, firmware, or software component trusted to perform critical security functions, such as verifying the next stage of a boot process.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-1b-secure-enclave",
@@ -1449,13 +1449,13 @@
       "concept_tags": [
         "cry.hsm-tpm"
       ],
-      "definition": "",
+      "definition": "An isolated execution and storage environment that protects sensitive operations or secrets from other software, including parts of the main operating system.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-des-data-encryption-standard",
@@ -1512,13 +1512,13 @@
       "concept_tags": [
         "cry.sym-legacy"
       ],
-      "definition": "",
+      "definition": "Transforming readable data into ciphertext using a cryptographic algorithm and key so authorized parties can recover it while others cannot readily read it.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-2a-symmetric-encryption",
@@ -1531,13 +1531,13 @@
       "concept_tags": [
         "cry.sym-legacy"
       ],
-      "definition": "",
+      "definition": "Encryption that uses the same secret key to encrypt and decrypt data. It is efficient for bulk data but requires secure key distribution and storage.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-aes-aes-256-advanced-encryption-standard",
@@ -1571,13 +1571,13 @@
       "concept_tags": [
         "cry.sym-chacha20"
       ],
-      "definition": "",
+      "definition": "A symmetric stream cipher using a 256-bit key. ChaCha20-Poly1305 adds authentication; ChaCha20 alone does not detect tampering, and a nonce must not repeat under the same key.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc8439.txt"
     },
     {
       "id": "sy0701-card-1-2a-cipher-modes",
@@ -1590,13 +1590,13 @@
       "concept_tags": [
         "cry.cipher-modes"
       ],
-      "definition": "",
+      "definition": "Methods for applying a block cipher to data longer than one block. Modes differ in integrity protection, initialization requirements, parallelism, and error handling.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/38/a/final"
     },
     {
       "id": "sy0701-card-1-2a-cbc-cipher-block-chaining",
@@ -1611,13 +1611,13 @@
       "concept_tags": [
         "cry.cipher-modes"
       ],
-      "definition": "",
+      "definition": "Cipher Block Chaining combines each plaintext block with the preceding ciphertext block before encryption. It needs an unpredictable initialization vector and separate integrity protection.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/38/a/final"
     },
     {
       "id": "sy0701-card-1-2a-gcm-galois-counter-mode",
@@ -1632,13 +1632,13 @@
       "concept_tags": [
         "cry.cipher-modes"
       ],
-      "definition": "",
+      "definition": "Galois/Counter Mode provides authenticated encryption: confidentiality plus an authentication tag for integrity. Reusing a nonce with the same key can severely compromise security.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/38/d/final"
     },
     {
       "id": "sy0701-card-1-2a-asymmetric-encryption",
@@ -1651,13 +1651,13 @@
       "concept_tags": [
         "cry.diffie-hellman"
       ],
-      "definition": "",
+      "definition": "Encryption using a public/private key pair: the public key encrypts and the corresponding private key decrypts in an encryption-capable scheme. Not every public-key algorithm supports encryption.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-2a-public-key",
@@ -1670,13 +1670,13 @@
       "concept_tags": [
         "cry.diffie-hellman"
       ],
-      "definition": "",
+      "definition": "The shareable part of an asymmetric key pair, used to verify signatures or, in supported schemes, encrypt data for the matching private key.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-2a-private-key",
@@ -1689,13 +1689,13 @@
       "concept_tags": [
         "cry.diffie-hellman"
       ],
-      "definition": "",
+      "definition": "The secret part of an asymmetric key pair, used to create signatures or, in supported schemes, decrypt data. It must remain under its owner's control.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-rsa-rivest-shamir-adleman",
@@ -1731,13 +1731,13 @@
       "concept_tags": [
         "cry.diffie-hellman"
       ],
-      "definition": "",
+      "definition": "Diffie-Hellman lets two parties establish a shared secret over an untrusted network. It is key agreement, not bulk encryption, and requires authentication to resist an on-path attacker.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-dhe-diffie-hellman-ephemeral",
@@ -1857,13 +1857,13 @@
       "concept_tags": [
         "cry.hash-md5"
       ],
-      "definition": "",
+      "definition": "Applying a one-way function to data to produce a digest used for integrity comparison. Hashing is not reversible encryption; a hash alone does not authenticate its source.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-sha-secure-hash-algorithm",
@@ -1899,13 +1899,13 @@
       "concept_tags": [
         "cry.hash-md5"
       ],
-      "definition": "",
+      "definition": "A fast, 128-bit hash with practical collision attacks. Do not use it for signatures or security-sensitive integrity checks; its speed also makes it unsuitable for password storage.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc6151.txt"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-hmac-hash-based-message-authentication-code",
@@ -1939,13 +1939,13 @@
       "concept_tags": [
         "cry.hash-md5"
       ],
-      "definition": "",
+      "definition": "Cryptographic values created with a private key and verified with the matching public key to check message integrity and signer authenticity. They do not encrypt the message.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-2b-salting",
@@ -1958,13 +1958,13 @@
       "concept_tags": [
         "cry.masking-salting"
       ],
-      "definition": "",
+      "definition": "Adding a unique, random value to each password before password hashing to defeat precomputed tables and make identical passwords produce different stored hashes. Salts need not be secret.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final"
     },
     {
       "id": "sy0701-card-1-2b-key-stretching",
@@ -1977,13 +1977,13 @@
       "concept_tags": [
         "cry.masking-salting"
       ],
-      "definition": "",
+      "definition": "Using a deliberately expensive password-based derivation function to increase the cost of guessing each password. It complements salting rather than replacing it.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final"
     },
     {
       "id": "sy0701-card-1-2b-steganography",
@@ -1996,13 +1996,13 @@
       "concept_tags": [
         "cry.steganography"
       ],
-      "definition": "",
+      "definition": "Concealing a message inside another medium, such as an image, to hide its existence. This is different from encryption, which hides a message's meaning.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-1-2b-blockchain",
@@ -2015,13 +2015,13 @@
       "concept_tags": [
         "cry.hash-md5"
       ],
-      "definition": "",
+      "definition": "A ledger whose blocks are cryptographically linked, making unauthorized changes detectable. Its consensus and governance determine how participants agree on valid records; it is not automatically private.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-1-2b-open-public-ledger",
@@ -2034,13 +2034,13 @@
       "concept_tags": [
         "cry.hash-md5"
       ],
-      "definition": "",
+      "definition": "A record of transactions available for public inspection. A public blockchain is one implementation; public visibility does not reveal every participant's real-world identity.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-psk-pre-shared-key",
@@ -2158,13 +2158,13 @@
       "concept_tags": [
         "cry.pki-certs"
       ],
-      "definition": "",
+      "definition": "Digitally signed statements binding a public key to an identity or name. Trust depends on validating the issuer, signature, validity period, intended use, and revocation status as applicable.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc5280.txt"
     },
     {
       "id": "sy0701-card-1-3a-self-signed-certificates",
@@ -2177,13 +2177,13 @@
       "concept_tags": [
         "cry.pki-certs"
       ],
-      "definition": "",
+      "definition": "Certificates signed using the private key corresponding to their own public key, rather than by a separate issuer. Trust must be established independently, not assumed from the signature.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc5280.txt"
     },
     {
       "id": "sy0701-card-1-3a-wildcard-certificates",
@@ -2196,13 +2196,13 @@
       "concept_tags": [
         "cry.pki-certs"
       ],
-      "definition": "",
+      "definition": "Certificates containing a wildcard DNS name, such as *.example.com, to cover matching hostnames at that level. They do not automatically cover deeper subdomains or the bare parent domain.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc9525.txt"
     },
     {
       "id": "sy0701-card-1-3a-subject-alternative-name-san",
@@ -2217,13 +2217,13 @@
       "concept_tags": [
         "cry.pki-certs"
       ],
-      "definition": "",
+      "definition": "The Subject Alternative Name extension lists identities, such as DNS names or IP addresses, that a certificate covers. Here SAN means certificate names, not storage networking.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc5280.txt"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-crl-certificate-revocation-list",
@@ -2299,13 +2299,13 @@
       "concept_tags": [
         "cry.key-mgmt"
       ],
-      "definition": "",
+      "definition": "Managing cryptographic keys throughout generation, distribution, storage, use, rotation, backup, revocation, and destruction to preserve their security and availability.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-3a-key-management-system-kms",
@@ -2320,13 +2320,13 @@
       "concept_tags": [
         "cry.key-mgmt"
       ],
-      "definition": "",
+      "definition": "A service or platform that centralizes cryptographic key lifecycle operations and access controls. It may use protected hardware but is not synonymous with an HSM.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-3a-key-escrow",
@@ -2339,13 +2339,13 @@
       "concept_tags": [
         "cry.key-mgmt"
       ],
-      "definition": "",
+      "definition": "Placing a recoverable copy of a cryptographic key with a trusted custodian under defined controls so authorized recovery is possible.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-card-1-3a-key-exchange",
@@ -2358,13 +2358,13 @@
       "concept_tags": [
         "cry.diffie-hellman"
       ],
-      "definition": "",
+      "definition": "A process for securely establishing shared keying material between parties, through key agreement or protected key transport.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-pem-privacy-enhanced-mail",
@@ -2400,13 +2400,13 @@
       "concept_tags": [
         "cry.pki-certs"
       ],
-      "definition": "",
+      "definition": "Distinguished Encoding Rules provide a single, canonical binary representation of ASN.1 data, commonly used for X.509 certificates. DER describes encoding, not encryption.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc5280.txt"
     },
     {
       "id": "sy0701-card-1-3b-p12-pkcs-12",
@@ -2421,13 +2421,13 @@
       "concept_tags": [
         "cry.pki-certs"
       ],
-      "definition": "",
+      "definition": "A common filename extension for a PKCS #12 container that can hold certificates and private keys, typically with password-based protection. Protecting the private key remains essential.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc7292.txt"
     },
     {
       "id": "sy0701-card-1-3b-pfx-personal-information-exchange",
@@ -2442,13 +2442,13 @@
       "concept_tags": [
         "cry.pki-certs"
       ],
-      "definition": "",
+      "definition": "A certificate/key container commonly using the PKCS #12 format, like a .p12 file. It can include a private key and certificate chain; it is not merely a public certificate.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc7292.txt"
     },
     {
       "id": "sy0701-acronym-crypto-keys-pki-pkcs-public-key-cryptography-standards",
@@ -2649,13 +2649,13 @@
       "concept_tags": [
         "sec.zero-trust"
       ],
-      "definition": "",
+      "definition": "Using context such as device posture, location, behavior, and risk to adjust identity verification or access decisions rather than relying only on a one-time login.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/207/final"
     },
     {
       "id": "sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
@@ -2983,13 +2983,13 @@
       "concept_tags": [
         "att.actor-apt"
       ],
-      "definition": "",
+      "definition": "An advanced persistent threat is a capable, well-resourced adversary that pursues objectives over time and adapts to defenses. It describes a threat actor or campaign, not one malware type.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-threat-actor",
@@ -3002,13 +3002,13 @@
       "concept_tags": [
         "att.actor-apt"
       ],
-      "definition": "",
+      "definition": "An individual or group capable of causing harm to systems or data, with motives, resources, access, and skill that influence the threat.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-threat-vectors",
@@ -3021,13 +3021,13 @@
       "concept_tags": [
         "att.actor-apt"
       ],
-      "definition": "",
+      "definition": "Paths or methods a threat can use to reach a target, such as phishing messages, exposed services, removable media, or compromised suppliers.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-attack-surface",
@@ -3040,13 +3040,13 @@
       "concept_tags": [
         "att.actor-apt"
       ],
-      "definition": "",
+      "definition": "The exposed interfaces, accounts, services, devices, and other points through which a system or organization could be attacked.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-insider-threat",
@@ -3059,13 +3059,13 @@
       "concept_tags": [
         "att.actor-insider"
       ],
-      "definition": "",
+      "definition": "Risk arising from someone with trusted or legitimate access, whether their harmful action is malicious, negligent, or caused by a compromised account.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-shadow-it",
@@ -3078,13 +3078,13 @@
       "concept_tags": [
         "att.actor-shadow-it"
       ],
-      "definition": "",
+      "definition": "Technology used without the organization's approval or oversight, potentially bypassing security controls, asset inventory, and data governance.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-hacktivist",
@@ -3097,13 +3097,13 @@
       "concept_tags": [
         "att.actor-hacktivist"
       ],
-      "definition": "",
+      "definition": "A threat actor motivated primarily by a political, social, or ideological cause, often seeking publicity, disruption, or disclosure.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-organized-crime",
@@ -3116,13 +3116,13 @@
       "concept_tags": [
         "att.actor-crime"
       ],
-      "definition": "",
+      "definition": "Coordinated criminal groups typically motivated by financial gain through activities such as fraud, extortion, data theft, and ransomware.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-unskilled-attacker-script-kiddie",
@@ -3137,13 +3137,13 @@
       "concept_tags": [
         "att.actor-scriptkiddie"
       ],
-      "definition": "",
+      "definition": "An attacker with limited technical expertise who relies heavily on existing tools, scripts, or instructions developed by others.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-threat-intelligence-feeds",
@@ -3157,13 +3157,13 @@
         "att.threat-feeds",
         "att.mitre-attack"
       ],
-      "definition": "",
+      "definition": "Sources of timely threat information, such as malicious addresses, domains, indicators, and adversary behavior, used to inform investigation and defenses.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-osint-open-source-intelligence",
@@ -3179,13 +3179,13 @@
         "att.threat-feeds",
         "att.mitre-attack"
       ],
-      "definition": "",
+      "definition": "Open-source intelligence is information collected and analyzed from publicly available sources. Public availability does not guarantee accuracy or permission for every use.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-ioc-indicator-of-compromise",
@@ -3200,13 +3200,13 @@
       "concept_tags": [
         "att.iocs"
       ],
-      "definition": "",
+      "definition": "An indicator of compromise is an observable artifact suggesting possible malicious activity, such as a suspicious file hash or domain. An indicator requires context, not automatic proof.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1a-ttp-tactics-techniques-and-procedures",
@@ -3221,13 +3221,13 @@
       "concept_tags": [
         "att.mitre-attack"
       ],
-      "definition": "",
+      "definition": "Tactics, techniques, and procedures describe an adversary's objectives, methods, and detailed ways of operating, helping defenders understand behavior beyond individual indicators.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1b-att-ck-mitre-att-ck",
@@ -3242,13 +3242,13 @@
       "concept_tags": [
         "att.mitre-attack"
       ],
-      "definition": "",
+      "definition": "MITRE's knowledge base of adversary tactics and techniques based on observed behavior, used for threat modeling, detection development, and assessing defensive coverage.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-2-1b-cyber-kill-chain",
@@ -3261,13 +3261,13 @@
       "concept_tags": [
         "att.kill-chain"
       ],
-      "definition": "",
+      "definition": "A model of intrusion stages from reconnaissance through actions on objectives, used to identify opportunities to interrupt an attack. Real attacks need not follow every stage in order.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html"
     },
     {
       "id": "sy0701-card-2-1b-diamond-model",
@@ -3280,13 +3280,13 @@
       "concept_tags": [
         "att.diamond-model"
       ],
-      "definition": "",
+      "definition": "An intrusion-analysis model linking four features of malicious activity: adversary, capability, infrastructure, and victim.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.activeresponse.org/wp-content/uploads/2013/07/diamond.pdf"
     },
     {
       "id": "sy0701-acronym-threat-intel-protection-stix-structured-threat-information-expression",
@@ -3362,13 +3362,13 @@
       "concept_tags": [
         "att.social-principles"
       ],
-      "definition": "",
+      "definition": "Psychological influences used to manipulate people into unsafe actions, such as authority, urgency, fear, familiarity, or social proof.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-social-engineering-attacks-pretexting-pretexting",
@@ -3400,13 +3400,13 @@
       "concept_tags": [
         "att.deepfake"
       ],
-      "definition": "",
+      "definition": "Synthetic or manipulated media that convincingly imitates a person's appearance or voice and may be used for impersonation, fraud, or disinformation.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-2-1b-disinformation",
@@ -3419,13 +3419,13 @@
       "concept_tags": [
         "att.social-principles"
       ],
-      "definition": "",
+      "definition": "False or misleading information deliberately created or spread to deceive or influence people.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-2-1b-misinformation",
@@ -3438,13 +3438,13 @@
       "concept_tags": [
         "att.social-principles"
       ],
-      "definition": "",
+      "definition": "False or misleading information shared without necessarily intending to deceive. Intent distinguishes it from disinformation.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-social-engineering-attacks-impersonation-impersonation-brand-impersonation",
@@ -3598,13 +3598,13 @@
       "concept_tags": [
         "att.quishing"
       ],
-      "definition": "",
+      "definition": "Phishing that uses a QR code to lead someone to a malicious destination or unsafe action, often disguising the destination until the code is scanned.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-social-engineering-attacks-bec-business-email-compromise",
@@ -3898,13 +3898,13 @@
       "concept_tags": [
         "att.app-xxe"
       ],
-      "definition": "",
+      "definition": "XML external entity injection abuses unsafe XML parser settings to resolve attacker-controlled external entities, potentially exposing files, making server-side requests, or exhausting resources.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html"
     },
     {
       "id": "sy0701-card-2-2a-cors-cross-origin-resource-sharing",
@@ -3919,13 +3919,13 @@
       "concept_tags": [
         "arch.api-security"
       ],
-      "definition": "",
+      "definition": "Cross-Origin Resource Sharing is a browser mechanism that lets a server specify which origins may read its responses. It is not authentication or a replacement for server-side authorization.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/HTML5_Security_Cheat_Sheet.md"
     },
     {
       "id": "sy0701-acronym-application-software-attacks-api-attack-application-programming-interface-attack",
@@ -3958,13 +3958,13 @@
       "concept_tags": [
         "arch.api-security"
       ],
-      "definition": "",
+      "definition": "A value representing a user's application session, often carried in a cookie. Protecting it against theft, replay, and unintended disclosure helps prevent session hijacking.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"
     },
     {
       "id": "sy0701-card-2-2a-input-validation",
@@ -3977,13 +3977,13 @@
       "concept_tags": [
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "Checking incoming data against allowed types, lengths, formats, ranges, and business rules before processing. It does not replace parameterized queries, output encoding, or authorization.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html"
     },
     {
       "id": "sy0701-card-2-2a-rce-remote-code-execution",
@@ -3999,13 +3999,13 @@
         "arch.api-security",
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "Remote code execution is the ability to run attacker-controlled code on another system across a network, typically by exploiting a vulnerability or unsafe functionality.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-2-2a-misconfiguration",
@@ -4019,13 +4019,13 @@
         "arch.api-security",
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "An incorrect or insecure system setting, such as excessive permissions, exposed storage, default credentials, or an unnecessarily open service, that creates security risk.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-application-software-attacks-buffer-overflow-buffer-overflow",
@@ -4116,13 +4116,13 @@
       "concept_tags": [
         "vul.resource-exhaustion"
       ],
-      "definition": "",
+      "definition": "Consuming finite resources such as memory, CPU, connections, or storage until a system slows down or cannot serve legitimate requests.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-2-2b-resource-reuse",
@@ -4135,13 +4135,13 @@
       "concept_tags": [
         "vul.resource-exhaustion"
       ],
-      "definition": "",
+      "definition": "In virtualization, reallocating memory or storage without adequately clearing it can expose a previous workload's data to a later tenant or process.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/125/final"
     },
     {
       "id": "sy0701-card-2-2b-unquoted-service-path",
@@ -4154,13 +4154,13 @@
       "concept_tags": [
         "vul.unquoted-path"
       ],
-      "definition": "",
+      "definition": "A Windows service executable path containing spaces but lacking quotes can be misinterpreted. An attacker who can write to a searched location may substitute an executable, potentially gaining the service's privileges.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/techniques/T1574/009/"
     },
     {
       "id": "sy0701-acronym-password-credential-attacks-brute-force-brute-force-attack",
@@ -4231,13 +4231,13 @@
       "concept_tags": [
         "att.pwd-stuffing"
       ],
-      "definition": "",
+      "definition": "Trying username/password pairs stolen from one service against other services, exploiting password reuse rather than guessing one common password across many accounts.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-password-credential-attacks-credential-replay-credential-replay",
@@ -4604,13 +4604,13 @@
       "concept_tags": [
         "vul.zero-day"
       ],
-      "definition": "",
+      "definition": "A previously unknown vulnerability for which defenders have had no advance opportunity to prepare a fix. A zero-day attack exploits it before an effective patch is available.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-malware-attacks-ransomware-ransomware",
@@ -4836,13 +4836,13 @@
       "concept_tags": [
         "att.pass-the-hash"
       ],
-      "definition": "",
+      "definition": "Using a stolen password hash to authenticate in a compatible authentication system without recovering the plaintext password. It differs from cracking the hash.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/techniques/T1550/002/"
     },
     {
       "id": "sy0701-card-2-3b-kerberoasting",
@@ -4855,13 +4855,13 @@
       "concept_tags": [
         "att.kerberoasting"
       ],
-      "definition": "",
+      "definition": "Obtaining Kerberos service tickets and attempting offline password cracking against their encrypted portions to recover a service account's credentials.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/techniques/T1558/003/"
     },
     {
       "id": "sy0701-acronym-application-software-attacks-malicious-update-malicious-software-update",
@@ -5096,13 +5096,13 @@
       "concept_tags": [
         "net.proto-dnssec"
       ],
-      "definition": "",
+      "definition": "Allowing or blocking DNS resolution according to policy or threat intelligence to reduce access to unwanted domains. It does not encrypt DNS or provide DNSSEC validation by itself.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/41/r1/final"
     },
     {
       "id": "sy0701-acronym-threat-intel-protection-dmarc-domain-based-message-authentication-reporting-and-conformance",
@@ -5358,13 +5358,13 @@
         "arch.microsegmentation",
         "arch.air-gap"
       ],
-      "definition": "",
+      "definition": "Dividing a network into zones and controlling traffic between them to limit access and lateral movement. A VLAN needs appropriate enforcement rules to provide effective isolation.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/41/r1/final"
     },
     {
       "id": "sy0701-term-chapter3-architecture-models-microsegmentation",
@@ -5579,13 +5579,13 @@
       "concept_tags": [
         "arch.ztna"
       ],
-      "definition": "",
+      "definition": "Zero Trust Network Access provides policy-based access to specific applications or resources using identity and context, rather than automatically trusting an entire network connection.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/207/final"
     },
     {
       "id": "sy0701-acronym-network-architecture-protocols-vpn-virtual-private-network",
@@ -5619,13 +5619,13 @@
       "concept_tags": [
         "net.app-ngfw"
       ],
-      "definition": "",
+      "definition": "A control that permits or blocks network traffic according to configured rules, helping enforce boundaries between systems or networks.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/41/r1/final"
     },
     {
       "id": "sy0701-card-3-1b-ngfw-next-generation-firewall",
@@ -5640,13 +5640,13 @@
       "concept_tags": [
         "net.app-ngfw"
       ],
-      "definition": "",
+      "definition": "A next-generation firewall combines traditional traffic filtering with capabilities such as application awareness and intrusion prevention. Its effectiveness depends on configuration and visibility into traffic.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/41/r1/final"
     },
     {
       "id": "sy0701-card-3-1b-proxy-server",
@@ -5659,13 +5659,13 @@
       "concept_tags": [
         "net.app-proxy"
       ],
-      "definition": "",
+      "definition": "An intermediary that makes or handles requests on behalf of a client or server, allowing functions such as filtering, access control, caching, or hiding backend addresses.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/41/r1/final"
     },
     {
       "id": "sy0701-card-3-1b-nac-network-access-control",
@@ -5680,13 +5680,13 @@
       "concept_tags": [
         "net.wifi-802-1x"
       ],
-      "definition": "",
+      "definition": "Network Access Control evaluates who or what is connecting and may check device posture before granting, restricting, or quarantining network access.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/41/r1/final"
     },
     {
       "id": "sy0701-card-3-1b-bgp-border-gateway-protocol",
@@ -5702,13 +5702,13 @@
         "arch.vpn",
         "net.app-ngfw"
       ],
-      "definition": "",
+      "definition": "Border Gateway Protocol exchanges routing information between autonomous systems on the Internet, using routing policies and path information. It does not itself encrypt application traffic.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc4271.txt"
     },
     {
       "id": "sy0701-acronym-network-architecture-protocols-tcp-ip-transmission-control-protocol-internet-protocol",
@@ -5741,13 +5741,13 @@
       "concept_tags": [
         "net.proto-tls"
       ],
-      "definition": "",
+      "definition": "User Datagram Protocol sends independent datagrams without a connection handshake or built-in delivery and ordering guarantees. Applications must provide any reliability they require.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc768.txt"
     },
     {
       "id": "sy0701-acronym-network-architecture-protocols-icmp-internet-control-message-protocol",
@@ -5840,13 +5840,13 @@
       "concept_tags": [
         "net.proto-dnssec"
       ],
-      "definition": "",
+      "definition": "Domain Name System Security Extensions use digital signatures to authenticate DNS data and check its integrity. They do not encrypt DNS queries or prevent every DNS-related attack.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc4033.txt"
     },
     {
       "id": "sy0701-acronym-network-architecture-protocols-nat-pat-network-address-translation-port-address-translation",
@@ -5879,13 +5879,13 @@
       "concept_tags": [
         "net.proto-tls"
       ],
-      "definition": "",
+      "definition": "Destination Network Address Translation changes a packet's destination address, and sometimes port, to direct it to another host, such as forwarding public traffic to an internal server.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc3022.txt"
     },
     {
       "id": "sy0701-acronym-network-architecture-protocols-ldap-lightweight-directory-access-protocol",
@@ -6062,13 +6062,13 @@
       "concept_tags": [
         "net.proto-ipsec"
       ],
-      "definition": "",
+      "definition": "Encapsulating Security Payload is an IPsec protocol providing confidentiality and/or integrity and authentication, with anti-replay support as configured. It is IP protocol 50, not TCP port 50.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc4303.txt"
     },
     {
       "id": "sy0701-acronym-network-architecture-protocols-ftps-sftp-file-transfer-protocol-secure-ssh-file-transfer-protocol",
@@ -6122,13 +6122,13 @@
       "concept_tags": [
         "net.proto-snmpv3"
       ],
-      "definition": "",
+      "definition": "Version 3 of the Simple Network Management Protocol supports authenticated and encrypted management messages. Use an authentication-and-privacy security level; encryption is not automatic for every configuration.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc3414.txt"
     },
     {
       "id": "sy0701-acronym-network-architecture-protocols-smtp-smtps-simple-mail-transfer-protocol-secure-smtp",
@@ -6222,13 +6222,13 @@
       "concept_tags": [
         "net.wifi-wpa2"
       ],
-      "definition": "",
+      "definition": "Wi-Fi Protected Access 2 is a wireless security scheme commonly using AES-CCMP. Personal mode uses a shared secret; Enterprise mode uses individual authentication through 802.1X.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/8-10/config-guide/b_cg810/wlan_security.html"
     },
     {
       "id": "sy0701-card-3-2b-wpa3",
@@ -6241,13 +6241,13 @@
       "concept_tags": [
         "net.wifi-wpa3"
       ],
-      "definition": "",
+      "definition": "Wi-Fi Protected Access 3 strengthens wireless security; Personal mode uses SAE to improve password-based authentication. Strong authentication still depends on configuration, and legacy transition modes can reduce protection.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/8-10/config-guide/b_cg810/wlan_security.html"
     },
     {
       "id": "sy0701-card-3-2b-ccmp",
@@ -6260,13 +6260,13 @@
       "concept_tags": [
         "net.wifi-wpa2"
       ],
-      "definition": "",
+      "definition": "Counter Mode with Cipher Block Chaining Message Authentication Code Protocol uses AES to protect Wi-Fi data confidentiality and integrity, commonly in WPA2 networks.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/8-10/config-guide/b_cg810/wlan_security.html"
     },
     {
       "id": "sy0701-card-3-2b-ssid",
@@ -6279,13 +6279,13 @@
       "concept_tags": [
         "net.wifi-802-1x"
       ],
-      "definition": "",
+      "definition": "A Service Set Identifier is the name identifying a wireless network. Hiding its broadcast is not effective access control because the name can still be discovered.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/8-10/config-guide/b_cg810/wlan_security.html"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-iaas-paas-saas-infrastructure-platform-software-as-a-service",
@@ -6339,13 +6339,13 @@
       "concept_tags": [
         "arch.serverless"
       ],
-      "definition": "",
+      "definition": "A cloud model in which the provider manages the underlying servers and execution platform while the customer deploys code or services. Servers still exist, and customer security responsibilities remain.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-security.html"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-casb-cloud-access-security-broker",
@@ -6516,13 +6516,13 @@
       "concept_tags": [
         "arch.virtualization"
       ],
-      "definition": "",
+      "definition": "Running isolated virtual computing environments on shared physical hardware through a hypervisor, allowing flexible resource use while introducing host and isolation risks.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/125/final"
     },
     {
       "id": "sy0701-card-3-3a-containers",
@@ -6535,13 +6535,13 @@
       "concept_tags": [
         "arch.containers"
       ],
-      "definition": "",
+      "definition": "Application packages that isolate processes and dependencies while typically sharing the host operating system kernel. They are not equivalent to fully separate virtual machines.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/190/final"
     },
     {
       "id": "sy0701-card-3-3a-vdi-virtual-desktop-infrastructure",
@@ -6556,13 +6556,13 @@
       "concept_tags": [
         "arch.virtualization"
       ],
-      "definition": "",
+      "definition": "Virtual Desktop Infrastructure hosts desktop environments centrally and presents them to users remotely, helping centralize management while requiring secure access and session controls.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/125/final"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-bios-basic-input-output-system",
@@ -6595,13 +6595,13 @@
       "concept_tags": [
         "ops.os-baseline"
       ],
-      "definition": "",
+      "definition": "Unified Extensible Firmware Interface initializes a computer and starts its operating system. It can support Secure Boot, which checks signed boot components; UEFI alone does not guarantee Secure Boot is enabled.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-os-operating-system",
@@ -6698,13 +6698,13 @@
       "concept_tags": [
         "ops.os-baseline"
       ],
-      "definition": "",
+      "definition": "A Storage Area Network provides shared, block-level storage to servers over a dedicated storage network. Here SAN means storage networking, not certificate alternative names.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-iot-internet-of-things",
@@ -6818,13 +6818,13 @@
       "concept_tags": [
         "ops.mdm-mam"
       ],
-      "definition": "",
+      "definition": "Mobile Application Management applies policy to applications and their data, such as managed access, app configuration, or selective removal of organizational data, without necessarily managing the entire device.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://learn.microsoft.com/en-us/intune/app-management/overview"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-uem-unified-endpoint-management",
@@ -6859,13 +6859,13 @@
       "concept_tags": [
         "ops.os-baseline"
       ],
-      "definition": "",
+      "definition": "The point when a product reaches the end of its supported lifecycle. Continuing to use it without security updates creates risk and may require replacement or compensating controls.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-api-application-programming-interface",
@@ -6898,13 +6898,13 @@
       "concept_tags": [
         "arch.api-security"
       ],
-      "definition": "",
+      "definition": "Protecting application programming interfaces through authentication, authorization, validation, rate controls, and secure transport. A valid token does not automatically authorize every object or operation.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-sdk-software-development-kit",
@@ -7090,13 +7090,13 @@
       "concept_tags": [
         "risk.treatment"
       ],
-      "definition": "",
+      "definition": "Address Space Layout Randomization changes where code and data are placed in memory to make exploitation less predictable. It mitigates some attacks but does not remove software vulnerabilities.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-cloud-endpoint-infrastructure-selinux-security-enhanced-linux",
@@ -7149,13 +7149,13 @@
       "concept_tags": [
         "risk.treatment"
       ],
-      "definition": "",
+      "definition": "Heating, ventilation, and air conditioning maintain suitable environmental conditions for equipment and people. Failures can damage hardware or disrupt availability.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-term-chapter3-data-lifecycle-protection-data-at-rest",
@@ -7301,13 +7301,13 @@
       "concept_tags": [
         "data.classification"
       ],
-      "definition": "",
+      "definition": "Assigning data categories based on sensitivity, value, and obligations so handling, access, storage, and protection requirements can be applied consistently.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-3-4a-data-sanitization",
@@ -7320,13 +7320,13 @@
       "concept_tags": [
         "data.sanitization"
       ],
-      "definition": "",
+      "definition": "Making access to target data on media infeasible using an appropriate clear, purge, or destroy technique. Simply deleting a file is not reliable sanitization.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/88/r2/final"
     },
     {
       "id": "sy0701-card-3-4a-data-minimization",
@@ -7339,13 +7339,13 @@
       "concept_tags": [
         "data.classification"
       ],
-      "definition": "",
+      "definition": "Collecting, using, and retaining only the personal data needed for a defined purpose, reducing unnecessary privacy exposure.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
     },
     {
       "id": "sy0701-card-3-4a-data-retention-policy",
@@ -7358,13 +7358,13 @@
       "concept_tags": [
         "gov.policy-retention"
       ],
-      "definition": "",
+      "definition": "Rules specifying how long different records must be kept and when they may be disposed of, accounting for operational, legal, and contractual requirements and holds.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-3-4a-data-sovereignty",
@@ -7377,13 +7377,13 @@
       "concept_tags": [
         "data.classification"
       ],
-      "definition": "",
+      "definition": "The principle that data is subject to the laws and authority of relevant jurisdictions. It concerns legal control, not merely the physical location of a server.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-3-4a-data-residency",
@@ -7396,13 +7396,13 @@
       "concept_tags": [
         "data.classification"
       ],
-      "definition": "",
+      "definition": "The geographic location where data is stored or processed, often chosen to satisfy organizational, contractual, or regulatory requirements.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-3-4b-backups",
@@ -7415,13 +7415,13 @@
       "concept_tags": [
         "data.backups"
       ],
-      "definition": "",
+      "definition": "Separate copies of data kept for restoration after loss, corruption, or disruption. Recovery depends on usable, protected backups and tested restoration procedures.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final ; https://www.ic3.gov/CSA/2023/230614.pdf"
     },
     {
       "id": "sy0701-card-3-4b-immutable-backups",
@@ -7434,13 +7434,13 @@
       "concept_tags": [
         "data.immutable-321"
       ],
-      "definition": "",
+      "definition": "Backup copies protected against modification or deletion for a defined retention period. They reduce tampering risk but still need protected administration and recovery testing.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final ; https://www.ic3.gov/CSA/2023/230614.pdf"
     },
     {
       "id": "sy0701-card-3-4b-3-2-1-backup-rule",
@@ -7453,13 +7453,13 @@
       "concept_tags": [
         "data.immutable-321"
       ],
-      "definition": "",
+      "definition": "Keep at least three copies of data, including the working copy, on two different media types, with one copy off-site. Offline or immutable protection strengthens the strategy.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final ; https://www.ic3.gov/CSA/2023/230614.pdf"
     },
     {
       "id": "sy0701-acronym-chapter3-architecture-resilience-acronyms-ha-high-availability",
@@ -7512,13 +7512,13 @@
       "concept_tags": [
         "data.ha-clustering"
       ],
-      "definition": "",
+      "definition": "Coordinating multiple systems to provide a service, distribute work, or support failover. Shared failures and data corruption can still affect a cluster; clustering is not a backup.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final ; https://www.ic3.gov/CSA/2023/230614.pdf"
     },
     {
       "id": "sy0701-term-chapter3-resilience-recovery-load-balancing",
@@ -7762,13 +7762,13 @@
       "concept_tags": [
         "ops.port-hardening"
       ],
-      "definition": "",
+      "definition": "Reducing unnecessary exposure by disabling unused physical or logical ports and services, restricting allowed connections, and securing the ports that remain in use.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-term-chapter4-hardening-baselines-application-whitelisting-blacklisting",
@@ -8004,13 +8004,13 @@
       "concept_tags": [
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "Identity and Access Management manages digital identities and their access lifecycle, including provisioning, authentication, authorization, review, and deprovisioning.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-acronym-security-operations-response-pam-privileged-access-management",
@@ -8065,13 +8065,13 @@
       "concept_tags": [
         "sec.sep-of-duties"
       ],
-      "definition": "",
+      "definition": "Splitting sensitive responsibilities among different people or roles so one person cannot independently complete or conceal a high-risk activity.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-term-chapter4-vulnerability-access-ops-provisioning-deprovisioning",
@@ -8103,13 +8103,13 @@
       "concept_tags": [
         "iam.provisioning"
       ],
-      "definition": "",
+      "definition": "Periodically reviewing and confirming that users' permissions remain appropriate for their current duties, removing unnecessary or outdated access.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-4-1b-identity-proofing",
@@ -8122,13 +8122,13 @@
       "concept_tags": [
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "Establishing confidence in a claimed real-world identity using evidence before issuing or enrolling credentials. It is different from authenticating an already enrolled user.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://pages.nist.gov/800-63-4/sp800-63a.html"
     },
     {
       "id": "sy0701-card-4-1b-identity-federation",
@@ -8141,13 +8141,13 @@
       "concept_tags": [
         "iam.sso-federation"
       ],
-      "definition": "",
+      "definition": "An arrangement in which one identity provider's assertions are accepted by another service or organization under a trust agreement, enabling access across security domains.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-4-1b-abac-attribute-based-access-control",
@@ -8162,13 +8162,13 @@
       "concept_tags": [
         "iam.abac"
       ],
-      "definition": "",
+      "definition": "Attribute-Based Access Control evaluates policy using attributes of the subject, resource, action, and environment, such as role, data sensitivity, device state, or location.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/162/final"
     },
     {
       "id": "sy0701-card-4-1b-authentication-factors",
@@ -8181,13 +8181,13 @@
       "concept_tags": [
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "Different categories of evidence used to verify identity: something you know, have, or are. Two credentials from the same category do not constitute multifactor authentication.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final"
     },
     {
       "id": "sy0701-card-4-1b-passwordless-authentication",
@@ -8200,13 +8200,13 @@
       "concept_tags": [
         "iam.fido2-passwordless"
       ],
-      "definition": "",
+      "definition": "Authentication without entering a reusable account password, using mechanisms such as cryptographic authenticators. Passwordless does not automatically mean multifactor or phishing-resistant.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final"
     },
     {
       "id": "sy0701-card-4-1b-fido2",
@@ -8219,13 +8219,13 @@
       "concept_tags": [
         "iam.fido2-passwordless"
       ],
-      "definition": "",
+      "definition": "A standards framework combining WebAuthn and CTAP for public-key authentication. It supports passkeys and security keys that bind authentication to the legitimate relying party rather than sending a shared password.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://fidoalliance.org/passkeys/"
     },
     {
       "id": "sy0701-card-4-1b-totp-time-based-one-time-password",
@@ -8240,13 +8240,13 @@
       "concept_tags": [
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "A time-based one-time password is generated from a shared secret and the current time interval. A captured code can still be relayed before it expires; TOTP is not inherently phishing-resistant.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc6238.txt"
     },
     {
       "id": "sy0701-card-4-1b-hotp-hmac-based-one-time-password",
@@ -8261,13 +8261,13 @@
       "concept_tags": [
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "An HMAC-based one-time password is generated from a shared secret and a moving counter. Unlike TOTP, its moving factor is event-based rather than the current time.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc4226.txt"
     },
     {
       "id": "sy0701-card-4-2a-802-1x",
@@ -8280,13 +8280,13 @@
       "concept_tags": [
         "net.wifi-802-1x"
       ],
-      "definition": "",
+      "definition": "A standard for port-based network access control using a supplicant, authenticator, and authentication server. It supports enterprise wired and wireless authentication; it does not itself encrypt all application traffic.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/8-10/config-guide/b_cg810/wlan_security.html"
     },
     {
       "id": "sy0701-card-4-2a-ldaps",
@@ -8300,13 +8300,13 @@
         "net.wifi-802-1x",
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "LDAP protected by TLS, commonly using TCP 636, to secure directory communication. LDAP can also negotiate TLS using StartTLS, commonly on TCP 389.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc4513.txt"
     },
     {
       "id": "sy0701-card-4-2a-kerberos",
@@ -8319,13 +8319,13 @@
       "concept_tags": [
         "iam.kerberos"
       ],
-      "definition": "",
+      "definition": "A ticket-based network authentication protocol using a trusted Key Distribution Center and symmetric cryptography. It supports mutual authentication and depends on appropriate time synchronization.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc4120.txt"
     },
     {
       "id": "sy0701-card-4-2a-kdc-key-distribution-center",
@@ -8340,13 +8340,13 @@
       "concept_tags": [
         "iam.kerberos"
       ],
-      "definition": "",
+      "definition": "A Kerberos Key Distribution Center provides authentication and ticket-granting services, issuing tickets that clients use to authenticate to network services.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc4120.txt"
     },
     {
       "id": "sy0701-term-chapter4-monitoring-logging-syslog",
@@ -8455,13 +8455,13 @@
       "concept_tags": [
         "ops.netflow-pcap"
       ],
-      "definition": "",
+      "definition": "Recording network packets for troubleshooting, monitoring, or investigation. Encrypted traffic can limit payload visibility, and captures may contain sensitive information that needs protection.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/86/final"
     },
     {
       "id": "sy0701-card-4-2a-spf-sender-policy-framework",
@@ -8476,13 +8476,13 @@
       "concept_tags": [
         "net.proto-email"
       ],
-      "definition": "",
+      "definition": "Sender Policy Framework uses DNS records to state which hosts may send mail for an envelope-sender or HELO domain. It does not itself authenticate the visible From address or encrypt email.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc7208.txt"
     },
     {
       "id": "sy0701-card-4-2a-s-mime",
@@ -8495,13 +8495,13 @@
       "concept_tags": [
         "net.proto-email"
       ],
-      "definition": "",
+      "definition": "Secure/Multipurpose Internet Mail Extensions uses certificates and public-key cryptography to sign and/or encrypt email content, supporting sender authentication, integrity, and confidentiality as configured.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.rfc-editor.org/rfc/rfc8551.txt"
     },
     {
       "id": "sy0701-card-4-2a-far-false-acceptance-rate",
@@ -8516,13 +8516,13 @@
       "concept_tags": [
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "False Acceptance Rate measures how often a biometric system incorrectly accepts an unauthorized person. A false acceptance is an authentication security failure.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final"
     },
     {
       "id": "sy0701-card-4-2a-frr-false-rejection-rate",
@@ -8537,13 +8537,13 @@
       "concept_tags": [
         "iam.auth-factors"
       ],
-      "definition": "",
+      "definition": "False Rejection Rate measures how often a biometric system incorrectly rejects an authorized person, affecting usability and legitimate access.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final"
     },
     {
       "id": "sy0701-acronym-security-operations-response-soc-security-operations-center",
@@ -8741,13 +8741,13 @@
       "concept_tags": [
         "ops.scan-discovery"
       ],
-      "definition": "",
+      "definition": "Scanning networks or environments to identify devices, services, and other assets for inventory and visibility. Discovery alone is not a complete vulnerability assessment.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/115/final"
     },
     {
       "id": "sy0701-card-4-2b-credentialed-vulnerability-scanning",
@@ -8760,13 +8760,13 @@
       "concept_tags": [
         "ops.scan-credentialed"
       ],
-      "definition": "",
+      "definition": "Scanning with authorized login credentials to inspect configurations, patch levels, and weaknesses from inside a system. Findings depend on the account's privileges and scanner coverage.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/115/final"
     },
     {
       "id": "sy0701-card-4-2b-uncredentialed-vulnerability-scanning",
@@ -8779,13 +8779,13 @@
       "concept_tags": [
         "ops.scan-credentialed"
       ],
-      "definition": "",
+      "definition": "Scanning without login credentials to identify weaknesses visible from the scanner's position, such as exposed services. It usually has less insight into internal configuration than credentialed scanning.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/115/final"
     },
     {
       "id": "sy0701-term-chapter4-vulnerability-access-ops-false-positive",
@@ -8855,13 +8855,13 @@
       "concept_tags": [
         "att.threat-feeds"
       ],
-      "definition": "",
+      "definition": "A proactive, hypothesis-driven search for malicious activity that may have bypassed existing detections, using evidence such as endpoint, network, and log data.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://attack.mitre.org/"
     },
     {
       "id": "sy0701-card-4-3a-owasp",
@@ -8874,13 +8874,13 @@
       "concept_tags": [
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "The Open Worldwide Application Security Project is a nonprofit community providing open application-security resources, including the Top 10, testing guidance, and defensive cheat sheets.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://owasp.org/"
     },
     {
       "id": "sy0701-card-4-3a-penetration-testing",
@@ -8893,13 +8893,13 @@
       "concept_tags": [
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "An authorized, scoped attempt to exploit weaknesses to evaluate security impact. It differs from vulnerability scanning, which primarily identifies potential weaknesses without necessarily exploiting them.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/115/final"
     },
     {
       "id": "sy0701-card-4-3a-rules-of-engagement",
@@ -8912,13 +8912,13 @@
       "concept_tags": [
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "Agreed limits for a security test, including authorization, scope, timing, permitted methods, communication, and stop conditions to protect systems and people.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/115/final"
     },
     {
       "id": "sy0701-card-4-3a-responsible-disclosure",
@@ -8931,13 +8931,13 @@
       "concept_tags": [
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "Reporting a vulnerability through an agreed process so affected parties can investigate and coordinate remediation before broader publication, without implying unauthorized testing is permitted.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-card-4-3a-dast-dynamic-application-security-testing",
@@ -8952,13 +8952,13 @@
       "concept_tags": [
         "vul.input-validation"
       ],
-      "definition": "",
+      "definition": "Dynamic Application Security Testing examines a running application from the outside by exercising interfaces and observing responses. It can find runtime issues but does not prove all code is secure.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/115/final"
     },
     {
       "id": "sy0701-acronym-security-operations-response-irp-incident-response-plan",
@@ -9012,13 +9012,13 @@
       "concept_tags": [
         "ir.lifecycle-nist"
       ],
-      "definition": "",
+      "definition": "A Computer Security Incident Response Team coordinates preparation for and handling of security incidents, including investigation, containment, recovery, and improvement activities.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/61/r3/final"
     },
     {
       "id": "sy0701-acronym-security-operations-response-cio-cso-chief-information-officer-chief-security-officer",
@@ -9091,13 +9091,13 @@
       "concept_tags": [
         "ir.tabletop-drills"
       ],
-      "definition": "",
+      "definition": "Discussion-based rehearsals in which participants work through a hypothetical incident to evaluate roles, decisions, communication, and plans without conducting a full operational response.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/61/r3/final"
     },
     {
       "id": "sy0701-acronym-security-operations-response-picerl-preparation-identification-containment-eradication-recovery-and-lessons-learned",
@@ -9131,13 +9131,13 @@
       "concept_tags": [
         "ir.lifecycle-nist"
       ],
-      "definition": "",
+      "definition": "Legacy NIST SP 800-61 Rev. 2 groups response into preparation; detection/analysis; containment/eradication/recovery; and post-incident activity. SY0-701 covers these activities. Current Rev. 3 integrates incident response with CSF 2.0.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/61/r2/final ; https://csrc.nist.gov/pubs/sp/800/61/r3/final"
     },
     {
       "id": "sy0701-term-chapter4-forensics-response-containment",
@@ -9245,13 +9245,13 @@
       "concept_tags": [
         "ir.chain-of-custody"
       ],
-      "definition": "",
+      "definition": "Protecting evidence against alteration, loss, or contamination while documenting its handling and chain of custody so its integrity can be evaluated.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/86/final"
     },
     {
       "id": "sy0701-card-4-3b-forensic-imaging",
@@ -9264,13 +9264,13 @@
       "concept_tags": [
         "ir.forensic-imaging"
       ],
-      "definition": "",
+      "definition": "Creating a forensic copy of storage, commonly a bit-for-bit image including unallocated space, for analysis while preserving the original and documenting acquisition and integrity checks.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/86/final"
     },
     {
       "id": "sy0701-term-chapter4-forensics-response-memory-dump",
@@ -9302,13 +9302,13 @@
       "concept_tags": [
         "ir.forensic-hash"
       ],
-      "definition": "",
+      "definition": "Comparing cryptographic hashes of acquired evidence or copies to check that their bytes match the recorded reference. Matching hashes support integrity, not proof of lawful acquisition or complete chain of custody.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/86/final"
     },
     {
       "id": "sy0701-acronym-security-operations-response-drp-disaster-recovery-plan",
@@ -9344,13 +9344,13 @@
       "concept_tags": [
         "ir.lifecycle-nist"
       ],
-      "definition": "",
+      "definition": "Mean Time To Detect is the average elapsed time between a defined incident start and its detection. Organizations must use consistent start and detection criteria when comparing this metric.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/61/r3/final"
     },
     {
       "id": "sy0701-acronym-risk-governance-business-mttr-mean-time-to-repair-recover",
@@ -9405,13 +9405,13 @@
       "concept_tags": [
         "gov.nist-csf"
       ],
-      "definition": "",
+      "definition": "Governance, Risk, and Compliance coordinates organizational direction, risk management, and adherence to relevant obligations so security decisions support business objectives.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-term-chapter5-governance-data-roles-security-steering-committee",
@@ -9445,13 +9445,13 @@
       "concept_tags": [
         "gov.nist-csf"
       ],
-      "definition": "",
+      "definition": "The Chief Information Security Officer leads an organization's information security program, advising leadership on risk and coordinating security strategy, governance, and priorities.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-acronym-risk-governance-business-isms-information-security-management-system",
@@ -9505,13 +9505,13 @@
       "concept_tags": [
         "gov.iso-27001"
       ],
-      "definition": "",
+      "definition": "ISO/IEC 27001 specifies requirements for an information security management system. Certification assesses the defined management-system scope; it does not guarantee that no breach will occur.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.iso.org/standard/27001"
     },
     {
       "id": "sy0701-acronym-risk-governance-business-nist-national-institute-of-standards-and-technology",
@@ -9565,13 +9565,13 @@
       "concept_tags": [
         "gov.nist-sp800"
       ],
-      "definition": "",
+      "definition": "A collection of NIST Special Publications giving information-security and privacy guidance. Individual publications address topics such as controls, risk, identity, and incident response; it is not one certification.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be"
     },
     {
       "id": "sy0701-acronym-risk-governance-business-cis-center-for-internet-security",
@@ -9604,13 +9604,13 @@
       "concept_tags": [
         "gov.cis-controls"
       ],
-      "definition": "",
+      "definition": "A prioritized set of cybersecurity safeguards from the Center for Internet Security, organized to help organizations implement practical defenses against common attacks.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.cisecurity.org/controls"
     },
     {
       "id": "sy0701-card-5-1a-security-policy",
@@ -9623,13 +9623,13 @@
       "concept_tags": [
         "gov.policy-aup"
       ],
-      "definition": "",
+      "definition": "A high-level statement of management's security intent, responsibilities, and required outcomes that guides organizational decisions and supporting rules.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-5-1a-security-standards",
@@ -9642,13 +9642,13 @@
       "concept_tags": [
         "gov.policy-aup"
       ],
-      "definition": "",
+      "definition": "Specific mandatory requirements or approved configurations used to implement policy consistently, such as a required encryption configuration or password length.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-5-1a-security-procedures",
@@ -9661,13 +9661,13 @@
       "concept_tags": [
         "gov.policy-aup"
       ],
-      "definition": "",
+      "definition": "Documented, repeatable steps describing how to carry out a task or meet a security requirement.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-5-1a-security-guidelines",
@@ -9680,13 +9680,13 @@
       "concept_tags": [
         "gov.policy-aup"
       ],
-      "definition": "",
+      "definition": "Recommended practices that help people apply policy and make decisions, usually allowing more discretion than mandatory standards or procedures.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-acronym-risk-governance-business-gdpr-general-data-protection-regulation",
@@ -9801,13 +9801,13 @@
       "concept_tags": [
         "data.reg-pii-phi"
       ],
-      "definition": "",
+      "definition": "An identified or identifiable natural person to whom personal data relates, such as a customer or employee whose records are processed.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
     },
     {
       "id": "sy0701-term-chapter5-governance-data-roles-data-ownership",
@@ -9915,13 +9915,13 @@
       "concept_tags": [
         "gov.soc2"
       ],
-      "definition": "",
+      "definition": "An independent CPA examination and report on a service organization's controls relevant to selected Trust Services Criteria. It is an assurance report, not a guarantee of security or an ISO-style certification.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://us.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria-redlined.pdf"
     },
     {
       "id": "sy0701-card-5-1b-compliance-monitoring",
@@ -9934,13 +9934,13 @@
       "concept_tags": [
         "gov.soc2"
       ],
-      "definition": "",
+      "definition": "Ongoing checks, evidence collection, and reporting to determine whether systems and activities continue to meet applicable policies, contracts, laws, or standards.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-card-5-1b-attestation",
@@ -9953,13 +9953,13 @@
       "concept_tags": [
         "gov.soc2"
       ],
-      "definition": "",
+      "definition": "A formal assertion or confirmation that a statement or requirement is true, supported by appropriate evidence. Its meaning depends on context, such as an access review or independent assurance engagement.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://us.aicpa.org/content/dam/aicpa/interestareas/frc/assuranceadvisoryservices/downloadabledocuments/trust-services-criteria-redlined.pdf"
     },
     {
       "id": "sy0701-term-chapter5-vendor-supply-chain-right-to-audit-clause",
@@ -10048,13 +10048,13 @@
       "concept_tags": [
         "risk.qual-matrix"
       ],
-      "definition": "",
+      "definition": "A tool that combines likelihood and impact ratings to prioritize risks. Its rankings depend on defined scales and do not by themselves calculate financial loss.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-card-5-2a-risk-ownership",
@@ -10067,13 +10067,13 @@
       "concept_tags": [
         "risk.inherent-residual"
       ],
-      "definition": "",
+      "definition": "Assigning accountability for a risk to a person or role with authority to decide its treatment, monitor it, and escalate or accept it within approved limits.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-card-5-2a-risk-reporting",
@@ -10086,13 +10086,13 @@
       "concept_tags": [
         "risk.inherent-residual"
       ],
-      "definition": "",
+      "definition": "Communicating risk exposure, status, treatment progress, and significant changes to decision-makers in a form suited to their responsibilities.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-term-chapter5-risk-analysis-response-risk-appetite",
@@ -10143,13 +10143,13 @@
       "concept_tags": [
         "risk.inherent-residual"
       ],
-      "definition": "",
+      "definition": "Risk present before considering the effect of controls or other risk responses.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-card-5-2a-residual-risk",
@@ -10162,13 +10162,13 @@
       "concept_tags": [
         "risk.inherent-residual"
       ],
-      "definition": "",
+      "definition": "Risk remaining after controls or other risk responses have been applied. It may still exceed the organization's tolerance and require further action or authorized acceptance.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-card-5-2a-asset-value-av",
@@ -10183,13 +10183,13 @@
       "concept_tags": [
         "risk.quant-sle-ef"
       ],
-      "definition": "",
+      "definition": "Asset Value is the monetary value assigned to an asset for risk calculations. In quantitative analysis, single loss expectancy equals asset value multiplied by exposure factor.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/30/r1/final"
     },
     {
       "id": "sy0701-acronym-risk-governance-business-ef-exposure-factor",
@@ -10511,13 +10511,13 @@
       "concept_tags": [
         "risk.bia-rto-rpo"
       ],
-      "definition": "",
+      "definition": "Maximum Tolerable Downtime is the longest disruption a business process can endure before consequences become unacceptable. The recovery time objective should fit within this limit, allowing time to restore normal operations.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final ; https://www.ic3.gov/CSA/2023/230614.pdf"
     },
     {
       "id": "sy0701-acronym-risk-governance-business-roi-return-on-investment",
@@ -10758,13 +10758,13 @@
       "concept_tags": [
         "risk.sbom"
       ],
-      "definition": "",
+      "definition": "A Software Bill of Materials lists software components and their relationships, often including versions and suppliers. It supports dependency and vulnerability management but does not prove the software is vulnerability-free.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": true,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://www.ntia.gov/page/software-bill-materials"
     },
     {
       "id": "sy0701-card-5-2c-security-awareness-training",
@@ -10777,13 +10777,13 @@
       "concept_tags": [
         "gov.training-phish"
       ],
-      "definition": "",
+      "definition": "Education that helps people recognize security risks, follow policy, and report suspicious activity. It should be relevant, recurring, and evaluated for effectiveness rather than treated as a one-time exercise.",
       "exam_trap": "",
       "port_or_protocol": "",
       "is_acronym": false,
       "example": "",
       "legacy_ids": [],
-      "definition_source": "pending"
+      "definition_source": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
     },
     {
       "id": "sy0701-term-chapter5-awareness-training-role-based-security-training",
@@ -10864,7 +10864,7 @@
       "definition_source": "existing-bank"
     }
   ],
-  "source_note": "Owner-supplied 502-keyword inventory, organised under the five official SY0-701 domains. Study sections are custom groupings, not official objective numbers. Existing definitions retained; new definitions intentionally blank.",
+  "source_note": "Owner-supplied 502-keyword inventory, organised under the five official SY0-701 domains. Study sections are custom groupings, not official objective numbers. Prior 313 definitions retained; 189 missing definitions filled and editorially checked against SY0-701 scope and primary references on 2026-10-30. Supporting context terms are not a claim of additional exam objectives.",
   "source_url": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be",
   "legacy_decks": {
     "security-principles-access-models": [

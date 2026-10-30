@@ -9,7 +9,7 @@ const colors = {1:'#5d8ef5',2:'#df9660',3:'#30b9a4',4:'#a791e4',5:'#d9b45f'};
 const titles = new Map(seed.domains.map(domain => [domain.id, domainName(domain.id)]));
 const cardById = new Map(seed.cards.map(card => [card.id, card]));
 export const SY0701_ACRONYM_SOURCE = Object.freeze({
-  officialUrl: seed.source_url, reviewedAt: '2026-10-23', reviewNote: seed.source_note,
+  officialUrl: seed.source_url, reviewedAt: '2026-10-30', reviewNote: seed.source_note,
 });
 export const SY0701_ACRONYM_SETS = seed.decks.map(deck => ({
   id: deck.id, title: deck.title, code: deck.code,

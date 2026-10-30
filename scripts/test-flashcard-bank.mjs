@@ -66,10 +66,10 @@ test('all 313 prior card IDs and their definitions survive reorganisation',()=>{
   for(const oldId of Object.keys(seed.legacy_decks))assert.ok(getSy0701AcronymSet(oldId));
 });
 
-test('term-first faces hide expansions and definitions until the answer, including pending cards',()=>{
+test('term-first faces hide expansions and definitions until the answer, including fallback cards',()=>{
   const rto=cards.find(c=>c.term==='RTO');
   assert.deepEqual(flashcardFaces(rto),{front:'RTO',fullForm:'Recovery Time Objective',definition:rto.definition});
-  const blank=cards.find(c=>c.term==='Gap Analysis');
+  const blank={...cards.find(c=>c.term==='Gap Analysis'),definition:''};
   assert.equal(blank.definition,'');assert.equal(flashcardFaces(blank).front,'Gap Analysis');
   assert.equal(flashcardFaces(blank).definition,'');
   assert.equal(cards.filter(c=>c.term==='RBAC').length,1);
@@ -163,4 +163,26 @@ test('recommendations show at most two relevant 15-card sets without duplicates 
  assert.equal(recommendedFlashcardSets({diagnostic_weak_tags:['iam.mfa']},limited)[0].cards.length,1);
  const sameDomain=recommendedFlashcardSets({concept_streaks:[{concept_tag:'ops.siem',wrong_streak:3},{concept_tag:'ir.lifecycle-nist',wrong_streak:2}]});
  assert.equal(new Set(sameDomain.flatMap(set=>set.cards).map(card=>card.id)).size,sameDomain.flatMap(set=>set.cards).length);
+});
+
+
+test('every card now has a definition and all 189 added terms have reference provenance',()=>{
+  assert.equal(cards.filter(card=>card.id.startsWith('sy0701-card-')).length,189);
+  for(const card of cards){assert.ok(card.definition.trim().length>=25,card.term);assert.notEqual(card.definition_source,'pending',card.term);}
+  for(const card of cards.filter(card=>card.id.startsWith('sy0701-card-')))assert.match(card.definition_source,/^https:\/\//,card.term);
+});
+
+test('definitions retain important mechanism and standard-version boundaries',()=>{
+  const meaning=term=>cards.find(c=>c.term===term).definition;
+  assert.match(meaning('DNSSEC'),/do not encrypt/i);
+  assert.match(meaning('DH'),/key agreement, not bulk encryption/i);
+  assert.match(meaning('MD5'),/collision/i);
+  assert.match(meaning('CBC'),/separate integrity/i);
+  assert.match(meaning('GCM'),/nonce/i);
+  assert.match(meaning('TOTP'),/not inherently phishing-resistant/i);
+  assert.match(meaning('SNMPv3'),/not automatic/i);
+  assert.match(meaning('ESP'),/protocol 50, not TCP port 50/i);
+  assert.match(meaning('SOC 2'),/not.*certification/i);
+  assert.match(meaning('NIST Incident Response Lifecycle'),/Rev\. 3/);
+  assert.match(meaning('NIST Incident Response Lifecycle'),/Rev\. 2/);
 });
