@@ -66,13 +66,13 @@
 /* A week-by-week route, with only the current path open. */
 .lw-plan{max-width:1080px;padding:32px 24px 50px}
 .sp-page-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:26px}
-.sp-kicker{font-size:12px;letter-spacing:.12em;font-weight:750}
+.sp-kicker{font-size:13px;letter-spacing:.12em;font-weight:750}
 .lw-plan h1{font-size:clamp(32px,4.5vw,50px);letter-spacing:-.05em;line-height:1.12;margin:10px 0 0}
 .sp-device-note{font-size:13px;line-height:1.5;max-width:230px}
 .sp-plan-top{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(230px,1fr);gap:18px}
 .lw-plan .sp-focus{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;background:linear-gradient(130deg,#123e35,#205a4e);color:#f4fcf8;border:1px solid #417466;padding:30px;border-radius:24px;margin:0;min-height:260px}
 .lw-plan .sp-focus:after{content:'';position:absolute;right:-90px;bottom:-130px;width:300px;height:300px;border:1px solid #ffffff26;border-radius:50%;box-shadow:0 0 0 35px #ffffff08;pointer-events:none}
-.sp-focus-label{font-size:12px;letter-spacing:.1em;font-weight:750;color:#c9e5d8}
+.sp-focus-label{font-size:13px;letter-spacing:.1em;font-weight:750;color:#c9e5d8}
 .lw-plan .sp-focus h2{font-size:clamp(26px,3vw,36px);line-height:1.2;letter-spacing:-.035em;margin:24px 0 12px;max-width:560px}
 .sp-focus-tag{font-size:15px;overflow-wrap:anywhere;color:#d5eade}
 .lw-plan .sp-focus>.btn{margin-top:auto;position:relative;z-index:1;gap:22px;font-size:16px}
@@ -91,15 +91,15 @@
 .lw-plan .sp-weeks{display:block}
 .lw-plan .sp-week{display:grid;grid-template-columns:82px minmax(0,1fr);border:0;background:none;padding:0;border-radius:0;margin:0}
 .sp-week-index{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:24px}
-.sp-week-index>span{font-size:11px;font-weight:750;letter-spacing:.1em}
+.sp-week-index>span{font-size:13px;font-weight:750;letter-spacing:.1em}
 .sp-week-index>strong{font-size:32px;letter-spacing:-.05em;line-height:1.2}
 .sp-week-index>i{width:1px;flex:1;min-height:35px;background:color-mix(in srgb,currentColor 25%,transparent);margin-top:14px}
 .sp-week:last-child .sp-week-index>i{opacity:0}
 .sp-week-body{border:1px solid color-mix(in srgb,currentColor 23%,transparent);border-radius:20px;padding:24px;margin-bottom:16px;min-width:0}
 .sp-week.is-current .sp-week-body{border-color:#4f8d76;background:color-mix(in srgb,#508c72 7%,transparent);box-shadow:inset 4px 0 #4f8d76}
 .lw-plan .sp-weeks header{align-items:center;font-size:14px;flex-wrap:wrap}
-.sp-weeks header small{font-size:12px}
-.sp-weeks header b{font-size:12px;border:1px solid currentColor;border-radius:6px;padding:5px 9px}
+.sp-weeks header small{font-size:13px}
+.sp-weeks header b{font-size:13px;border:1px solid currentColor;border-radius:6px;padding:5px 9px}
 .lw-plan .sp-weeks h2{font-size:26px;letter-spacing:-.035em;margin:14px 0 6px}
 .sp-secondary{font-size:15px;margin:0 0 20px}
 .sp-week-measures{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
