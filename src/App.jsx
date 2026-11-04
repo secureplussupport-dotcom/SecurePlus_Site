@@ -30,7 +30,7 @@ import {useLiveSnapshot} from "./lib/useLiveSnapshot.js";
 import {progressOwner} from "./lib/liveRefresh.js";
 import { usePracticeAccess } from "./lib/usePracticeAccess.js";
 import { generationChoices, isProProfile, PRO_QUESTION_COUNTS } from "./lib/accessModel.js";
-import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from "./lib/archivedFeatures.js";
+import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, STUDY_PLAN_ACTIVE, DAILY_CHALLENGE_ACTIVE, PBQ_PRACTICE_ACTIVE, ARCHIVED_PUBLIC_PATHS, isArchivedView } from "./lib/archivedFeatures.js";
 import { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo, useTransition, useId } from "react";
 import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
@@ -414,7 +414,7 @@ const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/sy0-601-vs-sy0-701/", title:"SY0-601 migration guide", body:"Use transferable 601 concepts safely, then move into current SY0-701 PBQ practice." },
   { href:"/sy0-601-vs-sy0-701/", title:"SY0-601 vs SY0-701", body:"Compare the retired and current Security+ blueprints and rebuild an older study plan." },
   { href:"/security-plus-study-plan/", title:"Study plan", body:"A practical Security+ study schedule built around daily practice and review." },
-]);
+].filter(item=>!ARCHIVED_PUBLIC_PATHS.includes(item.href)));
 const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
 const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
@@ -20769,7 +20769,7 @@ function NavGlyph({type,active}) {
   }[type]||ShieldCheck;
   return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
 }
-const MOBILE_PRIMARY_NAV_IDS = new Set(["dashboard","mcq","daily","flashcards"]);
+const MOBILE_PRIMARY_NAV_IDS = new Set(["dashboard","mcq","deep-dives","flashcards"]);
 function MobileNavigationMenu({open,items=[],currentView,onNavigate,onClose}) {
   useEffect(()=>{
     if(!open)return;
@@ -23695,7 +23695,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       {readinessProfile.status==="loading"&&<CipherLoader t={t} compact label="Updating your progress…"/>}
       <DashboardMetrics onUpgrade={()=>onNav("pricing")} onRefresh={onRefreshAllowance} quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
-      <StudyPlanWidget study={study} onNavigate={onNav} onOpenLesson={onOpenDeepDive}/>
+      {STUDY_PLAN_ACTIVE&&<StudyPlanWidget study={study} onNavigate={onNav} onOpenLesson={onOpenDeepDive}/>}
       <div className="dh-section-title"><h2>Made for your next step</h2></div>
       <section className="dh-next-grid" aria-label="Dashboard action recommendations">
         <article className={`dh-personal dh-widget ${showAssistantDashboardSet?"has-review":""}`}>
@@ -23715,7 +23715,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       </section>
 
       <section className="dh-shortcuts" aria-label="More ways to learn">
-        <button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><strong>Daily challenge</strong>{streakInfo?.activity?.challenge&&<span>Completed today</span>}</span><ArrowUpRight size={19}/></button>
+        {DAILY_CHALLENGE_ACTIVE&&<button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><strong>Daily challenge</strong>{streakInfo?.activity?.challenge&&<span>Completed today</span>}</span><ArrowUpRight size={19}/></button>}
         <button className="dh-shortcut dh-lessons" onClick={()=>onNav("deep-dives")}><span className="dh-shortcut-icon"><BookOpenCheck size={23}/></span><span><strong>Concept Deep Dives</strong></span><ArrowUpRight size={19}/></button>
         {showStarredDashboardSet?<button className="dh-shortcut dh-saved" onClick={()=>onOpenFlashcards?.(STARRED_FLASHCARD_SET_ID)}><span className="dh-shortcut-icon"><Star size={23}/></span><span><strong>{starredFlashcards.length} saved flashcards</strong></span><ArrowUpRight size={19}/></button>:<button className="dh-shortcut dh-saved" onClick={()=>onNav("flashcards")}><span className="dh-shortcut-icon"><Layers3 size={23}/></span><span><strong>Browse the decks</strong></span><ArrowUpRight size={19}/></button>}
       </section>
@@ -24044,7 +24044,7 @@ function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your
           <button className="btn btn-primary" onClick={onSignup}>Create Free Account</button>
           <button className="btn btn-outline" onClick={onLogin}>Log In</button>
           <button className="btn btn-ghost" onClick={onPractice}>Practise MCQs</button>
-          <button className="btn btn-ghost" onClick={onDaily}>Daily Challenge</button>
+          {DAILY_CHALLENGE_ACTIVE&&<button className="btn btn-ghost" onClick={onDaily}>Daily Challenge</button>}
         </div>
       </div>
     </div>
@@ -26117,7 +26117,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
 
   const explainExamMode=()=>addMessage("cipher","Exam Mode is for rehearsal when you want pressure: timed practice, mixed objectives, review after submission, and a report card that points you toward chapters to repair next.");
 
-  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, MCQ exams up to 90 questions, Smart Review, report cards, and Concept Deep Dives for focused exam preparation.`);
+  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It offers unlimited MCQ generation, exams up to 90 questions, precise practice filters and unlimited question bookmarks.`);
 
   const explainPaymentPolicy=()=>addMessage("cipher","New Pro purchases are one-time passes through Stripe and never renew. Existing recurring subscriptions keep their original cancellation controls. SecurePlus does not store card details.");
 
@@ -26218,12 +26218,12 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
     {label:"Build weak flashcards",detail:isPro?"Pro targeted deck":"Pro mode",icon:<TextCursorInput size={15}/>,action:previewWeakFlashcards},
     {label:"Why these questions?",detail:"Smart Review logic",icon:<Brain size={15}/>,action:explainSmartReview},
     {label:"Feature help",detail:"Practice, Pro, policies",icon:<Lightbulb size={15}/>,action:showFeatureHelp},
-    {label:"How should I approach PBQs?",detail:"Scenario strategy",icon:<ClipboardCheck size={15}/>,action:explainPbq},
+    ...(PBQ_PRACTICE_ACTIVE?[{label:"How should I approach PBQs?",detail:"Scenario strategy",icon:<ClipboardCheck size={15}/>,action:explainPbq}]:[]),
   ];
 
   const featurePrompts=[
     {label:"Exam Mode",detail:"Timed exam practice",icon:<ClipboardList size={15}/>,action:explainExamMode},
-    {label:"Daily Challenge",detail:"Streaks and rewards",icon:<Flame size={15}/>,action:explainDailyChallenge},
+    ...(DAILY_CHALLENGE_ACTIVE?[{label:"Daily Challenge",detail:"Streaks and rewards",icon:<Flame size={15}/>,action:explainDailyChallenge}]:[]),
     {label:"Pro Plan",detail:"What it unlocks",icon:<BadgeCheck size={15}/>,action:explainProPlan},
     {label:"Payment policy",detail:"Stripe and renewal",icon:<ShieldCheck size={15}/>,action:explainPaymentPolicy},
     {label:"Terms and conditions",detail:"Independent platform",icon:<FileText size={15}/>,action:explainTerms},
@@ -29530,7 +29530,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
           <div className="deep-dive-lesson-action-grid">
             <button className="btn deep-dive-lesson-btn-checkpoint" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Checkpoint</button>
             <button className="btn deep-dive-lesson-btn-review" type="button" onClick={handleLessonReviewAction}><Brain size={16}/>Smart Review</button>
-            <button className="btn deep-dive-lesson-btn-pbq" type="button" onClick={handleRelatedPbqAction}><Target size={16}/>Related PBQ</button>
+            {PBQ_PRACTICE_ACTIVE&&<button className="btn deep-dive-lesson-btn-pbq" type="button" onClick={handleRelatedPbqAction}><Target size={16}/>Related PBQ</button>}
             <a className="btn deep-dive-lesson-btn-flashcards" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();handleRelatedFlashcardsAction();}}><TextCursorInput size={16}/>Review related flashcards</a>
           </div>
         </section>}
@@ -30529,14 +30529,14 @@ export default function App() {
   const [loading,setLoading]=useState(true);
   const [navigating,startNavigation]=useTransition();
   const authReturnFocus=useRef(null);
-  const setView=useCallback(next=>{if(next==="auth"&&document.activeElement!==document.body)authReturnFocus.current=modalReturnTarget(document.activeElement);startNavigation(()=>setViewImmediate(next));},[]);
+  const setView=useCallback(next=>{if(next==="auth"&&document.activeElement!==document.body)authReturnFocus.current=modalReturnTarget(document.activeElement);startNavigation(()=>setViewImmediate(normalizeAppHistoryView(next)));},[]);
   const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":urlAboutRequest?"about":devCoinPreview?"coins":readAppHistoryState().view);
   const guestBackgroundView=useRef("dashboard");
   useEffect(()=>{if(view!=="auth")guestBackgroundView.current=view;},[view]);
   const [flashcardsIntroRequested]=useState(()=>urlFlashcardsIntroRequest);
   const [attempts,setAttempts]=useState([]);
   const readinessProfile=useExamReadiness(user,attempts);
-  const study=useStudyPlan(user,attempts,readinessProfile);
+  const study=useStudyPlan(user,attempts,readinessProfile,STUDY_PLAN_ACTIVE);
   useEffect(()=>{
     if(!user)return;let active=true;const owner=dailyStreakOwner(user);
     Promise.all([DB.getFirstSteps(owner),DB.getMeaningfulStudy(owner)]).then(([steps,activity])=>{
@@ -30845,8 +30845,9 @@ export default function App() {
     refreshQuestionBankOverrides();
   },[refreshQuestionBankOverrides]);
 
+  const canReadPbqBank=PBQ_PRACTICE_ACTIVE||(isRootUser&&view==="question-admin");
   const refreshRemotePBQs=useCallback(async()=>{
-    if(!isSupabaseConfigured){
+    if(!isSupabaseConfigured||!canReadPbqBank){
       setRemotePbqBank(PBQ_BANK);
       setPbqBankLoading(false);
       setPbqBankError(null);
@@ -30864,7 +30865,7 @@ export default function App() {
     }finally{
       setPbqBankLoading(false);
     }
-  },[]);
+  },[canReadPbqBank]);
 
   useEffect(()=>{
     refreshRemotePBQs();
@@ -31715,7 +31716,7 @@ export default function App() {
     </>
   );
 
-  if(showDaily&&!user) return(
+  if(DAILY_CHALLENGE_ACTIVE&&showDaily&&!user) return(
     <>
       <style>{CSS}</style>
       {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
@@ -31818,7 +31819,7 @@ export default function App() {
                   More <ChevronDown size={14} aria-hidden="true"/>
                 </button>
                 <div id="guest-more-menu" className="guest-top-nav-more-menu" aria-label="More guest pages" aria-hidden={!guestMoreOpen} inert={!guestMoreOpen}>
-                    {guestMoreItems.map(item=>(
+                    {guestMoreItems.filter(item=>!isArchivedView(item.id)).map(item=>(
                       <button
                         key={item.id}
                         type="button"
@@ -31861,7 +31862,7 @@ export default function App() {
             {guestView==="mcq"&&(
               <GuestDiagnostic t={t} fullPage onSignup={goToSignup} onSave={savePendingGuestSmartReview} renderDefinitions={text=><GlossaryText text={text} t={t}/>}/>
             )}
-            {guestView==="pbq"&&(
+            {PBQ_PRACTICE_ACTIVE&&guestView==="pbq"&&(
               activeGuestPbq ? (
                 <PBQSim
             user={user}
@@ -31891,7 +31892,7 @@ export default function App() {
                 />
               )
             )}
-            {guestView==="daily"&&(
+            {DAILY_CHALLENGE_ACTIVE&&guestView==="daily"&&(
               <GuestLockedPage t={t} title="Create a free account for Daily Challenge" onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={goToSignup}/>
             )}
             {guestView==="objectives"&&<ObjectivesPage t={t}/>}
@@ -31936,7 +31937,7 @@ export default function App() {
   const pbqCoinUnlocked=Boolean(activePbq&&coinWallet.unlockedPbqIds.includes(activePbq.id));
   const nextPbq=activePbq?getNextRelatedPBQ(activePbq,attempts,livePbqBank):null;
 
-  if(pbqQ) return(
+  if(PBQ_PRACTICE_ACTIVE&&pbqQ) return(
     <>
       <style>{CSS}</style>
       {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
@@ -31994,7 +31995,7 @@ export default function App() {
   return(
     <>
       <style>{CSS}</style>
-      {study.showPopup&&<StudyGoalPopup key={user?.id||user?.email} study={study}/>}
+      {STUDY_PLAN_ACTIVE&&study.showPopup&&<StudyGoalPopup key={user?.id||user?.email} study={study}/>}
       {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
       <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
         <a className="skip-link" href="#secureplus-main">Skip to study content</a>
@@ -32023,7 +32024,7 @@ export default function App() {
 
           {/* Nav */}
           <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
-            {navItems.map(n=>(
+            {navItems.filter(n=>!isArchivedView(n.id)).map(n=>(
               <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={canonicalArea(view)===n.id?"page":undefined} className={`nav-lnk ${canonicalArea(view)===n.id?"act":""}`} onClick={()=>setView(n.id)}>
                 <NavGlyph type={n.icon} active={canonicalArea(view)===n.id}/>
                 <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
@@ -32063,15 +32064,15 @@ export default function App() {
           </div>
           {guestImportError&&<div className="card" role="status" style={{padding:18,marginBottom:18}}>{guestImportError} <button className="btn btn-outline" onClick={async()=>setAttempts(await importPendingGuestSmartReview(user,attempts))}>Retry diagnostic sync</button></div>}
           {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest={false} onStart={()=>setView("mcq")} onExplore={setView} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
-          {view==="study-plan"&&<StudyPlanPage study={study} onNavigate={setView} onOpenLesson={handleOpenDeepDive} onOpenDeck={handleOpenFlashcards}/>}
+          {STUDY_PLAN_ACTIVE&&view==="study-plan"&&<StudyPlanPage study={study} onNavigate={setView} onOpenLesson={handleOpenDeepDive} onOpenDeck={handleOpenFlashcards}/>}
           {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} onRefreshAllowance={practiceAccessState.refresh} practiceAccess={practiceAccessState.access} streakInfo={study.streak} study={study} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice practiceAccessState={practiceAccessState} examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
-          <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
+          {PBQ_PRACTICE_ACTIVE&&<div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("pricing")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
-          </div>
-          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward} onSave={handleSaveAttempt}/>}
+          </div>}
+          {DAILY_CHALLENGE_ACTIVE&&view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward} onSave={handleSaveAttempt}/>}
           {CIPHER_COINS_ACTIVE&&view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {false&&view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
@@ -32089,7 +32090,7 @@ export default function App() {
         </main>
         <MobileNavigationMenu
           open={mobileNavOpen}
-          items={navItems.filter(item=>!MOBILE_PRIMARY_NAV_IDS.has(item.id))}
+          items={navItems.filter(item=>!isArchivedView(item.id)&&!MOBILE_PRIMARY_NAV_IDS.has(item.id))}
           currentView={view}
           onNavigate={id=>{
             setMobileNavOpen(false);

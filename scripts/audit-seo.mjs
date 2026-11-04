@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import {ARCHIVED_PUBLIC_PATHS} from "../src/lib/archivedFeatures.js";
 import path from "node:path";
 
 const root = process.cwd();
@@ -79,7 +80,7 @@ function publicPageFiles() {
   return fs
     .readdirSync(publicDir, { withFileTypes: true })
     .filter(entry => entry.isDirectory() && (entry.name.startsWith("security-plus-") || entry.name.startsWith("sy0-")))
-    .filter(entry => !consolidatedPageSlugs.has(entry.name))
+    .filter(entry => !consolidatedPageSlugs.has(entry.name)&&!ARCHIVED_PUBLIC_PATHS.includes(`/${entry.name}/`))
     .map(entry => `public/${entry.name}/index.html`)
     .filter(file => fs.existsSync(path.join(root,file)))
     .sort();
@@ -240,6 +241,12 @@ for (const file of [...pageFiles, "index.html", "src/App.jsx"]) {
 const vercelConfig=JSON.parse(read("vercel.json"));
 const flashcardRedirect=(vercelConfig.redirects||[]).find(route=>route.source===flashcardsPath);
 if(flashcardRedirect)push(errors,"vercel.json",`${flashcardsPath} must return the interactive HTTP-200 entry instead of redirecting`);
+
+for(const archivedPath of ARCHIVED_PUBLIC_PATHS){
+  const redirect=(vercelConfig.redirects||[]).find(route=>route.source===`${archivedPath}:path*`);
+  if(!redirect||redirect.destination!=="/"||redirect.permanent!==false)push(errors,"vercel.json",`archived page needs a reversible homepage redirect: ${archivedPath}`);
+  if(sitemapUrls.includes(`${siteUrl}${archivedPath}`))push(errors,"public/sitemap.xml",`archived page must not be advertised: ${archivedPath}`);
+}
 
 const expectedConsolidationRedirects = [
   ["/security-plus-comptia-practice-test/", "/security-plus-practice-questions/"],

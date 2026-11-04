@@ -244,11 +244,13 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'distractors.length<2', "Question Manager should require at least two distractors for Select & Fill questions");
   requireContains("src/components/GuestLanding.jsx", "10 Q diagnostic", "the homepage should lead with the 10-question diagnostic CTA");
   requireContains("src/components/GuestLanding.jsx", "Why we’re different", "the homepage should offer the Why we’re different page as its secondary CTA");
-  requireContains("src/components/GuestDiagnostic.jsx", "Build my free study plan", "diagnostic results should lead to signup and saved Smart Review progress");
+  requireContains("src/components/GuestDiagnostic.jsx", "Save my results", "diagnostic results should lead to signup and saved Smart Review progress");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
-  requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
+  requireContains("src/App.jsx", "setViewImmediate(normalizeAppHistoryView(next))", "all navigation must normalize archived routes before rendering");
+  requireContains("src/App.jsx", "guestMoreItems.filter(item=>!isArchivedView(item.id))", "guest navigation must hide archived pages");
+  requireContains("src/App.jsx", "navItems.filter(n=>!isArchivedView(n.id))", "signed-in navigation must hide archived pages");
   requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:areaName\("mcq",true\)\},\s*\{id:"flashcards",label:areaName\("flashcards",true\)\},\s*\];/, "guest top navigation should show the diagnostic and flashcards beside account access");
-  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"pbq",label:areaName\("pbq",true\)\},\s*\{id:"objectives",label:areaName\("objectives",true\)\},\s*\{id:"about",label:areaName\("about",true\)\},\s*\{id:"deep-dives",label:areaName\("deep-dives",true\)\},\s*\{id:"privacy",label:areaName\("privacy",true\)\},\s*\{id:"terms",label:areaName\("terms",true\)\},\s*\];/, "guest More menu should retain PBQs, Why we’re different, the exam guide, deep dives, privacy, and terms links");
+  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"pbq",label:areaName\("pbq",true\)\},\s*\{id:"objectives",label:areaName\("objectives",true\)\},\s*\{id:"about",label:areaName\("about",true\)\},\s*\{id:"deep-dives",label:areaName\("deep-dives",true\)\},\s*\{id:"privacy",label:areaName\("privacy",true\)\},\s*\{id:"terms",label:areaName\("terms",true\)\},\s*\];/, "guest More definitions must retain recoverable pages and filter archived pages before rendering");
   requireContains("src/App.jsx", "guest-top-nav-more-menu", "guest secondary navigation should open in an expandable More menu");
   requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
   requireContains("src/App.jsx", "const quizSizes = isGuest?[10]:choices.sizes.map(option=>option.size)", "MCQ practice should use tier-aware fixed question counts");

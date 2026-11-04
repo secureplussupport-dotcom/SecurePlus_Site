@@ -16,24 +16,24 @@ import './StudyPlan.css';
 const lessons=sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).map(lesson=>({id:lesson.id,title:lesson.title,minutes:lesson.minutes,domainId:getSy0701DeepDiveProfile(lesson).domainId}));
 const loadState=()=>mcqEngineRequest('state');
 const domainName=id=>SY0701_DOMAINS.find(d=>d.id===Number(id))?.shortName;
-export function useStudyPlan(user,attempts,readiness){
+export function useStudyPlan(user,attempts,readiness,enabled=true){
  const owner=progressOwner(user);
  const [dismissed,setDismissed]=useState(null);
  const [revision,setRevision]=useState(0);
  const [storageError,setStorageError]=useState(false);
  useEffect(()=>{const changed=()=>setRevision(n=>n+1);window.addEventListener(STUDY_PROGRESS_EVENT,changed);window.addEventListener('storage',changed);return()=>{window.removeEventListener(STUDY_PROGRESS_EVENT,changed);window.removeEventListener('storage',changed);};},[]);
  const state=useMemo(()=>readStudyProgress(user),[owner,revision]);
- const live=useLiveSnapshot({owner,load:loadState,enabled:Boolean(user)&&user.authProvider==='supabase'&&mcqEngineEnabled,revision:attempts});
+ const live=useLiveSnapshot({owner,load:loadState,enabled:enabled&&Boolean(user)&&user.authProvider==='supabase'&&mcqEngineEnabled,revision:attempts});
  const preferences=useMemo(()=>studyPreferences(state.preferences||{}),[state.preferences]);
- const plan=useMemo(()=>readiness.status==='ready'?buildStudyPlan({preferences,mastery:readiness.concepts,completedLessons:state.completedLessons,lessons,decks:SY0701_ACRONYM_SETS,previous:state.plan}):state.plan,[preferences,readiness.status,readiness.concepts,state.completedLessons,state.plan]);
+ const plan=useMemo(()=>!enabled?null:readiness.status==='ready'?buildStudyPlan({preferences,mastery:readiness.concepts,completedLessons:state.completedLessons,lessons,decks:SY0701_ACRONYM_SETS,previous:state.plan}):state.plan,[enabled,preferences,readiness.status,readiness.concepts,state.completedLessons,state.plan]);
  useEffect(()=>{if(user&&plan&&plan!==state.plan&&!updateStudyProgress(user,current=>({...current,preferences:current.preferences||preferences,plan})))setStorageError(true);},[owner,plan]);
  const accountAge=Date.now()-Date.parse(user?.accountCreatedAt||user?.joined);
  const initialSetup=!state.popupDone&&accountAge>=0&&accountAge<86400000;
  const save=useCallback(input=>saveStudyPreferences(user,input,{initialSetup}),[owner,initialSetup]);
  const week=plan?.weeks.find(w=>w.start<=dateKey()&&w.end>dateKey())||plan?.weeks.find(w=>w.start>dateKey())||plan?.weeks.at(-1);
- const focus=focusOfDay({retests:live.value?.failed||[],mastery:readiness.concepts,lessons,completedLessons:state.completedLessons,catalogue:readiness.concepts||[],primary:week?.primary});
+ const focus=enabled?focusOfDay({retests:live.value?.failed||[],mastery:readiness.concepts,lessons,completedLessons:state.completedLessons,catalogue:readiness.concepts||[],primary:week?.primary}):null;
  const streak=meaningfulDailyStreak({attempts,days:state.days,today:dateKey()});
- return{state,preferences,plan,focus,streak,save,storageError,ready:readiness.status==='ready',focusReady:readiness.status==='ready'&&(user?.authProvider!=='supabase'||live.status==='ready'),retryFocus:live.refresh,retestsReady:live.status==='ready',dismiss:()=>setDismissed(owner),showPopup:Boolean(user)&&user.authProvider==='supabase'&&dismissed!==owner&&!state.popupDone&&accountAge>=0&&accountAge<86400000,stepsDone:computeFirstSteps({record:{'mcq-set':state.steps.mcq,lesson:state.steps.lesson,deck:state.steps.flashcards}}).allDone};
+ return{state,preferences,plan,focus,streak,save,storageError,ready:readiness.status==='ready',focusReady:readiness.status==='ready'&&(user?.authProvider!=='supabase'||live.status==='ready'),retryFocus:live.refresh,retestsReady:live.status==='ready',dismiss:()=>setDismissed(owner),showPopup:enabled&&Boolean(user)&&user.authProvider==='supabase'&&dismissed!==owner&&!state.popupDone&&accountAge>=0&&accountAge<86400000,stepsDone:computeFirstSteps({record:{'mcq-set':state.steps.mcq,lesson:state.steps.lesson,deck:state.steps.flashcards}}).allDone};
 }
 
 function GoalFields({value,onChange,step=null}){

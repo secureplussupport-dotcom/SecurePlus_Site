@@ -166,4 +166,4 @@
 
 .dh-home .dh-personal-body{flex:0;margin:12px 0 24px}.dh-home .dh-card-fan{height:120px}.dh-home .dh-personal .dh-widget-cta{margin-top:auto}
 .lw-mcq.mcq-hub-screen .mcq-exam-toggle-copy strong{font-size:16px}.lw-mcq.mcq-hub-screen .mcq-exam-toggle-row{margin:0 0 14px}.lw-mcq.mcq-hub-screen .mcq-exam-toggle{min-height:66px;padding:12px 18px}.lw-mcq.mcq-hub-screen .mcq-primary-count button{min-height:54px;font-size:25px}.lw-mcq.mcq-hub-screen .mcq-mode-choice .practice-mode-card{min-height:70px;padding:14px 16px}.lw-mcq.mcq-hub-screen .mcq-review-queue-row{gap:12px;border:0;border-radius:0;background:none;overflow:visible}
-@media(min-width:761px){.dh-home .dh-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))}.dh-home .dh-shortcut{padding:18px 16px}.dh-home .dh-shortcut strong{font-size:15px}}
+@media(min-width:761px){.dh-home .dh-shortcuts{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.dh-home .dh-shortcut{padding:18px 16px}.dh-home .dh-shortcut strong{font-size:15px}}

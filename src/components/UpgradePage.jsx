@@ -14,7 +14,6 @@ const comparison = [
   ['MCQ generation',`${FREE_GENERATION_LIMIT} / 12 hours`,'Unlimited'],
   ['Questions per set','Up to 30',`Up to ${PRO_MAX_SET_SIZE}`],
   ['Question library & Exam Mode','Full access','Full access'],
-  ['Daily Challenge','Included','Included'],
   ['Explanations for every MCQ option','Included','Included'],
   ['Flashcards','Full access','Full access'],
   ['Chapter, topic & difficulty filters','—','Included'],
