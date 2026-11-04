@@ -245,6 +245,8 @@ if(flashcardRedirect)push(errors,"vercel.json",`${flashcardsPath} must return th
 for(const archivedPath of ARCHIVED_PUBLIC_PATHS){
   const redirect=(vercelConfig.redirects||[]).find(route=>route.source===`${archivedPath}:path*`);
   if(!redirect||redirect.destination!=="/"||redirect.permanent!==false)push(errors,"vercel.json",`archived page needs a reversible homepage redirect: ${archivedPath}`);
+  const exactRedirect=(vercelConfig.redirects||[]).find(route=>route.source===archivedPath);
+  if(!exactRedirect||exactRedirect.destination!=="/"||exactRedirect.permanent!==false)push(errors,"vercel.json",`archived trailing-slash URL needs its own redirect: ${archivedPath}`);
   if(sitemapUrls.includes(`${siteUrl}${archivedPath}`))push(errors,"public/sitemap.xml",`archived page must not be advertised: ${archivedPath}`);
 }
 

@@ -2,6 +2,9 @@
   "functions": {"api/sessions.js": {"regions": ["sin1"]}},
   "ignoreCommand": "node scripts/vercel-ignore-build.mjs",
   "redirects": [
+    {"source": "/security-plus-study-plan/", "destination": "/", "permanent": false},
+    {"source": "/security-plus-daily-challenge/", "destination": "/", "permanent": false},
+    {"source": "/security-plus-pbq-practice/", "destination": "/", "permanent": false},
     {"source": "/security-plus-study-plan/:path*", "destination": "/", "permanent": false},
     {"source": "/security-plus-daily-challenge/:path*", "destination": "/", "permanent": false},
     {"source": "/security-plus-pbq-practice/:path*", "destination": "/", "permanent": false},

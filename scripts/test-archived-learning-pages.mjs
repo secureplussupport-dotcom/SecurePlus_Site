@@ -17,6 +17,7 @@ test('archived public URLs use temporary homepage redirects and leave the sitema
  assert.equal(ARCHIVED_PUBLIC_PATHS.length,3);
  for(const path of ARCHIVED_PUBLIC_PATHS){
   assert.deepEqual(config.redirects.find(route=>route.source===`${path}:path*`),{source:`${path}:path*`,destination:'/',permanent:false});
+  assert.deepEqual(config.redirects.find(route=>route.source===path),{source:path,destination:"/",permanent:false});
   assert(!sitemap.includes(`https://www.secureplusprep.com${path}`));
   assert(fs.existsSync(`public${path}index.html`),'preserve the archived page for restoration');
  }
