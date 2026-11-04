@@ -3,7 +3,7 @@ import {createLiveRefresh} from './liveRefresh.js';
 const NO_EVENTS=[];
 
 // Keep the last successful snapshot during refreshes; never share it across owners.
-export function useLiveSnapshot({owner,load,enabled=true,revision=null,events=NO_EVENTS}) {
+export function useLiveSnapshot({owner,load,enabled=true,revision=null,events=NO_EVENTS,pollInterval=30000}) {
   const [snapshot,setSnapshot]=useState(null);
   const [state,setState]=useState(null);
   const controller=useRef(null);
@@ -20,7 +20,7 @@ export function useLiveSnapshot({owner,load,enabled=true,revision=null,events=NO
     const changed=()=>refresh.refresh({followUp:true});
     const visible=()=>{if(!document.hidden)refresh.refresh();};
     refresh.refresh();
-    const timer=setInterval(()=>{if(!document.hidden)refresh.refresh();},30000);
+    const timer=pollInterval>0?setInterval(()=>{if(!document.hidden)refresh.refresh();},pollInterval):null;
     window.addEventListener('focus',visible);
     window.addEventListener('online',changed);
     document.addEventListener('visibilitychange',visible);
@@ -34,7 +34,7 @@ export function useLiveSnapshot({owner,load,enabled=true,revision=null,events=NO
       document.removeEventListener('visibilitychange',visible);
       events.forEach(event=>window.removeEventListener(event,changed));
     };
-  },[owner,load,enabled,revision,events]);
+  },[owner,load,enabled,revision,events,pollInterval]);
   const current=snapshot?.owner===owner?snapshot:null;
   const progress=state?.owner===owner?state:null;
   const refresh=useCallback(()=>controller.current?.refresh({followUp:true}) || Promise.resolve(null),[]);

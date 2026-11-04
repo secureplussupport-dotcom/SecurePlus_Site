@@ -15,7 +15,7 @@ export function computeFirstSteps({ record = {}, hasMcqAttempt = false, hasLesso
   const steps = [
     { id: 'mcq-set', title: 'Complete your first MCQ set', done: Boolean(record['mcq-set'] || hasMcqAttempt), action: 'mcq' },
     { id: 'lesson', title: 'Complete your first lesson', done: Boolean(record.lesson || hasLessonCompletion), action: 'deep-dives' },
-    { id: 'deck', title: 'Open your first flashcard deck', done: Boolean(record.deck || hasDeckActivity), action: 'flashcards' },
+    { id: 'deck', title: 'Complete your first flashcard deck', done: Boolean(record.deck || hasDeckActivity), action: 'flashcards' },
   ];
   const doneCount = steps.filter((step) => step.done).length;
   return {
@@ -31,4 +31,13 @@ export function recordFirstStep(record = {}, stepId) {
   if (!FIRST_STEP_IDS.includes(stepId)) return record;
   if (record[stepId]) return record;
   return { ...record, [stepId]: true };
+}
+
+export const FIRST_STEPS_LAUNCH_AT='2026-11-04T00:00:00Z';
+export function firstStepsEligible(user){
+ const created=Date.parse(user?.accountCreatedAt||user?.joined||'');
+ return Boolean(user&&user.authProvider!=='guest'&&Number.isFinite(created)&&created>=Date.parse(FIRST_STEPS_LAUNCH_AT));
+}
+export function onboardingSteps(state={}){
+ return computeFirstSteps({record:{'mcq-set':state.steps?.mcq,lesson:state.steps?.lesson,deck:state.journeyDeckCompleted===true}});
 }

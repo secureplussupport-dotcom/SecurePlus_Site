@@ -17,16 +17,16 @@ const covers = {
 };
 const colors = ['#82afff','#74d6cb','#c1a0f1','#f0bd80','#ed9ab7','#88c6ed','#c9cc84','#a8b4f5','#eead93'];
 
-export function FlashcardDeck({set, remembered, index, onOpen,query="",match=null}) {
+export function FlashcardDeck({set, remembered, index, onOpen,query="",match=null,recommended=false}) {
   const Icon = covers[set.code] || Layers3;
   return <button className={`fc-deck fc-deck-cover-${index % 4}`} style={{'--deck-color':colors[index % colors.length]}}
-    onClick={onOpen} aria-label={`Open ${set.title}: ${set.cards.length} cards`}>
+    onClick={onOpen} aria-label={`Open ${set.title}: ${set.cards.length} cards${recommended?", recommended from your diagnostic":""}`}>
     <span className="fc-deck-cover" aria-hidden="true">
       <span className="fc-cover-orbit"/><span className="fc-cover-orbit fc-cover-orbit-two"/>
       <span className="fc-cover-card fc-cover-card-back"/><span className="fc-cover-card"><Icon size={37} strokeWidth={1.6}/></span>
       <span className="fc-cover-code">{set.code}</span><span className="fc-cover-count">{set.cards.length} cards</span>
     </span>
-    <span className="fc-deck-body"><strong><Highlight text={set.title} query={query}/></strong>{match&&<span className="fc-search-reason">{match.reason}: <Highlight text={match.text} query={query}/></span>}
+    <span className="fc-deck-body">{recommended&&<span className="first-steps-recommended" title="Matches a concept from your diagnostic">Recommended</span>}<strong><Highlight text={set.title} query={query}/></strong>{match&&<span className="fc-search-reason">{match.reason}: <Highlight text={match.text} query={query}/></span>}
       <span className="fc-deck-terms">{set.cards.slice(0,3).map(card=><span key={card.id}><Highlight text={card.acronym||card.term} query={query}/></span>)}</span>
       <span className="fc-deck-bottom">{remembered>0&&<span><span className="fc-mini-track"><i style={{width:`${remembered/set.cards.length*100}%`}}/></span><small>{remembered} remembered</small></span>}<span className="fc-deck-open" aria-hidden="true"><ArrowUpRight size={20}/></span></span>
     </span>

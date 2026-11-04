@@ -20,12 +20,12 @@ export function recordStudyActivity(user,{type,id,lessonId,deckId,index=0,order=
   if(type==='card-rated')entry.cards=[...new Set([...entry.cards,id])];
   if(type==='daily-challenge')entry.challenge=true;
   if(type==='mcq-set')steps.mcq=true;
-  if(type==='deck-complete'||type==='deck-open')steps.flashcards=true;
+  if(type==='deck-complete')steps.flashcards=true;
   const completedLessons=type==='lesson-complete'?[...new Set([...state.completedLessons,lessonId])]:state.completedLessons;
   if(type==='lesson-complete')steps.lesson=true;
   if(['lesson-section','card-rated','daily-challenge'].includes(type))days[date]=entry;
   const resume=type==='deck-resume'?{setId:deckId,title,index,order,updatedAt:at}:state.resume;
-  return{...state,days,steps,completedLessons,resume};
+  return{...state,days,steps,completedLessons,resume,journeyDeckCompleted:type==='deck-complete'||state.journeyDeckCompleted===true};
  },storage);
 }
 
@@ -47,4 +47,14 @@ export function importLegacyStudyProgress(user,{steps={},days={}}={},storage=bro
   }
   return{...state,legacyImported:true,days:mergedDays,steps:{mcq:state.steps.mcq||Boolean(steps?.['mcq-set']),lesson:state.steps.lesson||Boolean(steps?.lesson),flashcards:state.steps.flashcards||Boolean(steps?.deck)}};
  },storage);
+}
+
+// Account completion is monotonic. A retry restores the same dated reward, never a new day.
+export function mergeFirstStepsProgress(user,row,storage=browserStorage()){
+ const state=readStudyProgress(user,storage),previous=state.firstStepsCompletion||{},rewardDay=previous.rewardDay||row.reward_day;
+ const next={...state,days:rewardDay?{...state.days,[rewardDay]:{...state.days[rewardDay],onboarding:true}}:state.days,
+  steps:{mcq:state.steps.mcq||Boolean(row.mcq_completed),lesson:state.steps.lesson||Boolean(row.lesson_completed),flashcards:state.steps.flashcards||Boolean(row.deck_completed)},
+  journeyDeckCompleted:state.journeyDeckCompleted===true||Boolean(row.deck_completed),
+  firstStepsCompletion:{completedAt:previous.completedAt||row.completed_at||null,celebrationSeenAt:previous.celebrationSeenAt||row.celebration_seen_at||null,rewardDay:rewardDay||null,ackSynced:previous.ackSynced===true||Boolean(row.celebration_seen_at)}};
+ return JSON.stringify(state)===JSON.stringify(next)||updateStudyProgress(user,()=>next,storage);
 }
