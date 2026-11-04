@@ -16078,7 +16078,7 @@ html{background:${t.bg};scroll-behavior:smooth;}
 body{background:
 radial-gradient(circle at 12% 8%, ${t.amber}18, transparent 28%),
 radial-gradient(circle at 88% 12%, ${t.green}14, transparent 30%),
-linear-gradient(180deg, ${t.bg} 0%, ${t.bg} 58%, ${t.panel} 100%);background-size:auto;color:${t.text};font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:16px;line-height:1.6;letter-spacing:0;transition:background .3s,color .3s;}
+linear-gradient(180deg, ${t.bg} 0%, ${t.bg} 58%, ${t.panel} 100%);background-size:auto;color:${t.text};font-family:'Montserrat',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:16px;line-height:1.6;letter-spacing:0;transition:background .3s,color .3s;}
 h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;font-weight:750;letter-spacing:-.035em;text-wrap:balance;}
 :root{--ui-text:${t.text};--ui-muted:${t.textSec};--ui-surface:${t.surface};--ui-panel:${t.panel};--ui-line:color-mix(in srgb,${t.border} 62%,${t.surface});--ui-focus:${t.green};--ui-shadow:0 4px 18px rgba(0,0,0,.035);}
 button,input,select{font:inherit;}
