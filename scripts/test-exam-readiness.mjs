@@ -91,3 +91,31 @@ test('count invariants hold for varied mastery and ignore evidence outside the c
   assertBreakdownCounts(summarizeReadiness({concepts,total:200,correct:100,metrics:metrics(200)},READINESS_CATALOGUE,now));
  }
 });
+
+// Showing readiness requires breadth across concepts, rather than repeated questions.
+test('dashboard hides readiness at 0 and 49 concepts and reveals it at exactly 50',async()=>{
+ const {dashboardReadiness}=await import('../src/lib/examReadiness.js');
+ for(const attempted of [0,49])assert.deepEqual(dashboardReadiness({status:'ready',attempted,score:85}),{state:'early',score:null});
+ assert.deepEqual(dashboardReadiness({status:'ready',attempted:50,score:85}),{state:'score',score:85});
+ assert.deepEqual(dashboardReadiness({status:'ready',attempted:50,score:0}),{state:'score',score:0});
+});
+test('50 questions on one concept and skipped concepts cannot unlock dashboard readiness',async()=>{
+ const {dashboardReadiness}=await import('../src/lib/examReadiness.js');
+ const answered=Array.from({length:50},(_,i)=>({qid:`q${i}`,conceptTag:catalogue[0].tag,ch:'1',correct:true,readinessSource:'mcq-set',createdAt:'2026-10-28'}));
+ const skipped=catalogue.slice(1,60).map((c,i)=>({qid:`skip${i}`,conceptTag:c.tag,ch:c.chapter,correct:false,skipped:true,readinessSource:'mcq-set'}));
+ const profile=summarizeReadiness(localReadinessEvidence([...answered,...skipped]),catalogue,now);
+ assert.equal(profile.distinctQuestions,50);assert.equal(profile.attempted,1);
+ assert.equal(dashboardReadiness(profile).state,'early');
+});
+test('50 distinct attempted concepts unlock the existing weighted score',async()=>{
+ const {dashboardReadiness}=await import('../src/lib/examReadiness.js');
+ const rows=catalogue.slice(0,50).map((c,i)=>({qid:`q${i}`,conceptTag:c.tag,ch:c.chapter,correct:i%2===0,readinessSource:i%2?'exam':'mcq-set',createdAt:'2026-10-28'}));
+ const profile=summarizeReadiness(localReadinessEvidence(rows),catalogue,now);
+ assert.equal(profile.attempted,50);assert.deepEqual(dashboardReadiness(profile),{state:'score',score:profile.score});
+});
+test('dashboard loading and unavailable data never show an early or fabricated score',async()=>{
+ const {dashboardReadiness}=await import('../src/lib/examReadiness.js');
+ assert.equal(dashboardReadiness({status:'loading',attempted:60,score:85}).state,'loading');
+ assert.equal(dashboardReadiness({status:'error',attempted:60,score:85}).state,'error');
+ assert.deepEqual(dashboardReadiness({status:'ready',attempted:60,score:null}),{state:'error',score:null});
+});

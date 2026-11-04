@@ -41,7 +41,7 @@ export function ReadinessBreakdown({profile,chapters}) {
   const masterySlices=[{label:'Mastered',count:mastered,color:'#43c8bb'},{label:'Still to grow',count:unmastered,color:'#6b9dff'}];
   const chapterSlices=profile.domains.map((domain,i)=>({label:`Domain ${domain.id}`,count:domain.unmastered,color:COLORS[i]}));
   return <section id="exam-readiness-breakdown" className="er-breakdown" aria-label="Exam readiness breakdown">
-    <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>{profile.level}</h2></div></header>
+    <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>Your concept mastery</h2></div></header>
     {status==='loading'?<CipherLoader compact label="Loading your progress…"/>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
       <p className="er-scope"><span><strong>{attempted}/{totalConcepts}</strong> concepts attempted</span><span>MCQ + Exam</span><span>All concepts included · unseen = 50</span></p>
       <div className="er-calculation">

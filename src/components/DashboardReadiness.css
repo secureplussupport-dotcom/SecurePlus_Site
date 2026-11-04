@@ -1,0 +1,15 @@
+.dashboard-shell.dh-home .dh-readiness.dh-readiness-simple{display:grid;grid-template-columns:1fr;place-items:center;position:relative;padding:0;min-height:310px;overflow:hidden}
+.dh-readiness-toggle{display:grid;place-items:center;position:relative;width:100%;min-height:310px;padding:28px;border:0;border-radius:inherit;background:transparent;color:inherit;cursor:pointer}
+.dashboard-shell.dh-home .dh-readiness-simple .dh-score{width:220px;grid-row:auto;margin:auto}
+.dashboard-shell.dh-home .dh-readiness-simple .dh-score strong{font-size:60px}
+.dh-readiness-chevron{position:absolute;right:22px;bottom:22px;color:var(--dh-muted);transition:transform .2s}
+.dh-readiness-toggle[aria-expanded=true] .dh-readiness-chevron{transform:rotate(180deg)}
+.dh-readiness-toggle:hover{background:color-mix(in srgb,var(--dh-green) 4%,transparent)}
+.dh-readiness-early{max-width:280px;text-align:center;font-size:clamp(22px,2.3vw,28px);line-height:1.4;font-weight:650;color:var(--dh-muted);padding:24px;margin:0}
+.dh-readiness-retry{display:grid;place-items:center;min-width:48px;min-height:48px;border:1px solid var(--dh-line);border-radius:12px;background:var(--dh-surface);color:var(--dh-text);cursor:pointer}
+.dh-readiness-loading{color:var(--dh-muted);animation:dh-readiness-spin 1s linear infinite}
+@keyframes dh-readiness-spin{to{transform:rotate(360deg)}}
+@media(max-width:760px){.dashboard-shell.dh-home .dh-readiness.dh-readiness-simple,.dh-readiness-toggle{min-height:260px}.dashboard-shell.dh-home .dh-readiness-simple .dh-score{width:200px}}
+@media(prefers-reduced-motion:reduce){.dh-readiness-loading{animation:none}.dh-readiness-chevron{transition:none}}
+
+.dh-readiness-toggle:focus-visible{outline-offset:-6px}

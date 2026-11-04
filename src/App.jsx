@@ -42,6 +42,8 @@ import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/m
 import { useQuestionPacing } from "./lib/useQuestionPacing.js";
 import {createReviewLaunchGate} from "./lib/reviewLaunch.js";
 import {AllowanceTimeline} from "./components/AllowanceTimeline.jsx";
+import {DashboardReadiness} from "./components/DashboardReadiness.jsx";
+import {dashboardReadiness} from "./lib/examReadiness.js";
 import { DashboardMetrics } from "./components/DashboardMetrics.jsx";
 import "./components/DashboardHome.css";
 import "./components/LearningWorkspace.css";
@@ -23641,8 +23643,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const [showReadinessLab,setShowReadinessLab]=useState(false);
   const activityProfile=getActivityProfile(attempts);
   const questionsDone=readinessProfile.activity?.total ?? activityProfile.uniqueQuestions;
-  const readiness=readinessProfile.score;
-  const readinessColor=readiness>=80?t.green:t.accent;
+  const showReadinessScore=dashboardReadiness(readinessProfile).state==="score";
   const isPro = user.tier==="pro";
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const showStarredDashboardSet=starredFlashcards.length>=5;
@@ -23686,24 +23687,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
           <div className="dh-practice-actions"><button className="btn dh-primary" onClick={()=>onNav("mcq")}>Start practice <ArrowRight size={18}/></button><button className="dh-text-button" onClick={()=>onNav("exam")}>Exam mode <ArrowUpRight size={15}/></button></div>
           <div className="dh-practice-art" aria-hidden="true"><span/><span/><span/><ShieldCheck size={46} strokeWidth={1.2}/></div>
         </article>
-        <article className="dh-readiness" aria-label="Exam readiness">
-          <div className="dh-readiness-top"><span className="dh-eyebrow"><Gauge size={15}/> EXAM READINESS</span><span className={`dh-live-dot ${readinessProfile.refreshing?"is-refreshing":""}`} title={readinessProfile.refreshing?"Updating progress":"Exam readiness"} aria-hidden="true"/></div>
-          <div className="dh-score" style={{"--dh-score-color":readinessColor}}>
-            <svg viewBox="0 0 200 200" aria-hidden="true">
-              <defs><linearGradient id="dashboard-readiness-arc" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#30b9a4"/><stop offset="65%" stopColor="var(--dh-score-color)"/><stop offset="100%" stopColor="#e4c68b"/></linearGradient></defs>
-              <circle className="dh-dial-rim" cx="100" cy="100" r="97"/>
-              <circle className="dh-dial-ticks" cx="100" cy="100" r="91" pathLength="120" strokeDasharray=".35 1.65" transform="rotate(-90 100 100)"/>
-              <circle className="dh-dial-track" cx="100" cy="100" r="78"/>
-              <circle className="dh-score-fill" style={{opacity:readinessProfile.status==="ready"&&readiness!=null&&readiness>0?1:0}} cx="100" cy="100" r="78" pathLength="100" strokeDasharray={`${readinessProfile.status==="ready"?(readiness ?? 0):0} 100`} transform="rotate(-90 100 100)"/>
-              {readinessProfile.status==="ready"&&readiness!=null&&readiness>0&&<circle className="dh-dial-tip" cx="100" cy="22" r="4" transform={`rotate(${readiness*3.6} 100 100)`}/>}
-            </svg>
-            <div><Sparkles className="dh-dial-emblem" size={18} aria-hidden="true"/><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readiness!=null&&readinessProfile.confidence==="Low"?"Early estimate":readinessProfile.level}</span></div>
-          </div>
-          <div className="readiness-evidence"><strong>{readinessProfile.confidence} confidence</strong><span>{readinessProfile.distinctQuestions} distinct questions</span><p>{readinessProfile.explanation}</p>{readinessProfile.confidence==="Low"&&readinessProfile.mean>=80&&<p role="status">{readinessProfile.level}</p>}{readinessProfile.stale&&<p role="status">{readinessProfile.staleNotice}</p>}</div>
-          <button className="dh-breakdown" type="button" aria-expanded={showReadinessLab} aria-controls="exam-readiness-breakdown" onClick={()=>setShowReadinessLab(value=>!value)}>{showReadinessLab?"Hide breakdown":"Break it down"}<ChevronDown size={16}/></button>
-        </article>
+        <DashboardReadiness profile={readinessProfile} t={t} expanded={showReadinessLab} onToggle={()=>setShowReadinessLab(value=>!value)}/>
       </section>
-      {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
+      {showReadinessLab&&showReadinessScore&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
 
       {readinessProfile.refreshError&&<p className="dh-progress-notice" role="status">Showing the last update. <button onClick={readinessProfile.retry}>Retry refresh</button></p>}
       {readinessProfile.status==="loading"&&<CipherLoader t={t} compact label="Updating your progress…"/>}

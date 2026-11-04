@@ -3,6 +3,13 @@ import {READINESS_CONCEPT_CATALOGUE} from '../data/readinessConceptCatalogue.js'
 import {SY0701_DOMAINS} from '../data/sy0701Domains.js';
 export const READINESS_CATALOGUE=Object.entries(READINESS_CONCEPT_CATALOGUE).flatMap(([chapter,tags])=>tags.map(tag=>({tag,chapter})));
 const day=86400000;
+// Dashboard visibility is based on distinct attempted concepts, not question volume.
+export function dashboardReadiness(profile={}) {
+ if(profile.status==='loading')return{state:'loading',score:null};
+ if(profile.status==='error')return{state:'error',score:null};
+ if(!(profile.attempted>=50))return{state:'early',score:null};
+ return Number.isFinite(profile.score)?{state:'score',score:profile.score}:{state:'error',score:null};
+}
 const eligible=event=>!event.pbq&&!event.skipped&&event.selected!==null&&event.selected_option_id!==null&&typeof event.correct==='boolean'&&Boolean(event.conceptTag)&&['mcq-set','exam'].includes(event.readinessSource||(event.exam?'exam':''));
 export function localReadinessEvidence(attempts=[]){
  const concepts=new Map(),chapters={},ids=new Set(),days=new Set(),dates=[];
